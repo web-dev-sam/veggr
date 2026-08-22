@@ -1,0 +1,451 @@
+/**
+ * veggr design tokens.
+ *
+ * Dark only, and deliberately: the generated icons are built as luminous ink on
+ * a dark tinted plate, so a light theme would need a second palette engine for
+ * no real gain in a kitchen-counter app.
+ *
+ * Colours are OKLCH so the greens stay the same visual weight as the reds — the
+ * same reason the icon engine converts hues (see lib/color.ts).
+ */
+
+@import "@fontsource-variable/geist/index.css";
+
+:root {
+  color-scheme: dark;
+
+  /* Lightness values are calibrated: OKLCH L is perceptual, so 0.16 lands at
+     near-black (#090f0a) rather than the dark grey it looks like on paper. */
+  --bg: oklch(0.205 0.014 152);
+  --bg-deep: oklch(0.165 0.012 152);
+  --surface: oklch(0.255 0.016 152);
+  --surface-hi: oklch(0.305 0.02 152);
+  --line: oklch(0.375 0.018 152 / 0.8);
+  --line-soft: oklch(0.375 0.018 152 / 0.42);
+
+  --text: oklch(0.97 0.008 150);
+  --dim: oklch(0.78 0.014 150);
+  --faint: oklch(0.63 0.014 150);
+
+  --accent: oklch(0.87 0.19 128);
+  --accent-deep: oklch(0.7 0.17 132);
+  --accent-ink: oklch(0.22 0.06 140);
+  --accent-glow: oklch(0.87 0.19 128 / 0.16);
+  --warn: oklch(0.82 0.16 75);
+  --danger: oklch(0.68 0.19 22);
+  /* A day that was logged but fell short of target. --surface-hi alone reads as
+     "nothing here", which is a lie the charts should not tell. */
+  --bar-low: oklch(0.5 0.09 140);
+
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --pad: 16px;
+  /* A selection ring is stroked outside its icon's box, so any element that
+     clips has to leave it this much room. Widest case is the 52px quick tile:
+     5.5 of the icon's 100 units, or 2.9px. */
+  --ring-bleed: 4px;
+  --shell: 520px;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 24px 48px -20px rgb(0 0 0 / 0.85);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  font-family: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.shell {
+  max-width: var(--shell);
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: var(--bg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 560px) {
+  .shell {
+    border-inline: 1px solid var(--line-soft);
+  }
+}
+
+.view {
+  flex: 1;
+  padding: 0 var(--pad) calc(112px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.topline {
+  padding: calc(14px + env(safe-area-inset-top)) var(--pad) 10px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topline h1 {
+  font-size: 26px;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ type */
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.dim {
+  color: var(--dim);
+}
+
+.faint {
+  color: var(--faint);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------- containers */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: var(--pad);
+}
+
+.card--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-inline: 2px;
+}
+
+.section-head h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- controls */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 560;
+  background: var(--surface-hi);
+  border: 1px solid var(--line-soft);
+  transition:
+    transform 0.12s var(--ease),
+    background 0.15s var(--ease);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+  font-weight: 620;
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.btn--sm {
+  height: 34px;
+  padding: 0 13px;
+  font-size: 13px;
+}
+
+.btn--icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.btn--danger {
+  color: var(--danger);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 520;
+  background: var(--surface-hi);
+  border: 1px solid var(--line-soft);
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.chip[aria-pressed="true"],
+.chip--on {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+/*
+ * Horizontal padding bleeds the row to the screen edge. Vertical padding is
+ * there for a different reason: `overflow-x: auto` makes `overflow-y` compute
+ * to `auto` as well, so this box clips top and bottom too, and a selection ring
+ * stroked outside its icon would lose its cap. Both axes cancel their padding
+ * with a negative margin, so the row occupies exactly the space it used to.
+ */
+.scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: calc(var(--ring-bleed) * -1) calc(var(--pad) * -1);
+  padding: var(--ring-bleed) var(--pad);
+  scroll-snap-type: x proximity;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+
+.field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+}
+
+.field input::placeholder {
+  color: var(--faint);
+}
+
+/* Every search field ships its own clear button; the platform one would double up. */
+.field input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ tabs */
+
+.tabs {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  background: color-mix(in oklab, var(--bg) 84%, transparent);
+  backdrop-filter: blur(18px) saturate(1.4);
+  border-top: 1px solid var(--line-soft);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  gap: 3px;
+  padding: 7px 0 5px;
+  border-radius: var(--r);
+  color: var(--faint);
+  font-size: 10.5px;
+  font-weight: 560;
+  letter-spacing: 0.01em;
+  transition: color 0.15s var(--ease);
+}
+
+.tab--on {
+  color: var(--accent);
+}
+
+/* ----------------------------------------------------------------- misc */
+
+.divider {
+  height: 1px;
+  background: var(--line-soft);
+}
+
+.empty {
+  padding: 34px 20px;
+  text-align: center;
+  color: var(--faint);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* --------------------------------------------------------------- motion */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.16s var(--ease);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.sheet-enter-active,
+.sheet-leave-active {
+  transition:
+    transform 0.28s var(--ease),
+    opacity 0.28s var(--ease);
+}
+
+.sheet-enter-from,
+.sheet-leave-to {
+  transform: translateY(14px);
+  opacity: 0;
+}
+
+.pop-enter-active {
+  animation: pop 0.34s var(--ease);
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
