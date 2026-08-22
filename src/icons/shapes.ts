@@ -126,6 +126,11 @@ export function dome(cx: number, cy: number, rx: number, ry: number): string {
   return `${arc(cx, cy, rx, ry, 180, 360)}Z`;
 }
 
+/** `dome` turned over — the bowl half of an ellipse, for shells and cut halves. */
+export function cup(cx: number, cy: number, rx: number, ry: number): string {
+  return `${arc(cx, cy, rx, ry, 0, 180)}Z`;
+}
+
 /**
  * Organic closed outline: sample `lobes` radii around an ellipse, then join the
  * samples with a closed Catmull-Rom spline converted to cubics. `jitter` is the

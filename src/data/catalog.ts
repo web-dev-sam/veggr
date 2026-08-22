@@ -15,10 +15,12 @@ import { FRUITING } from "./plants/fruiting.ts";
 import { GREENS } from "./plants/greens.ts";
 import { HERBS } from "./plants/herbs.ts";
 import { NUTS } from "./plants/nuts.ts";
+import { ORCHARD } from "./plants/orchard.ts";
 import { ROOTS } from "./plants/roots.ts";
 import { SEEDS } from "./plants/seeds.ts";
 import { SPICES } from "./plants/spices.ts";
 import { STEMS } from "./plants/stems.ts";
+import { TROPICAL } from "./plants/tropical.ts";
 
 /** Canonical order, by English name — a stable identity for the whole set. */
 export const PLANTS: readonly Plant[] = [
@@ -30,6 +32,8 @@ export const PLANTS: readonly Plant[] = [
   ...NUTS,
   ...SEEDS,
   ...SPICES,
+  ...ORCHARD,
+  ...TROPICAL,
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const byId = new Map(PLANTS.map((plant) => [plant.id, plant]));

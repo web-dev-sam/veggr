@@ -24,6 +24,7 @@ import { palette } from "../lib/color.ts";
 import { dice } from "../lib/hash.ts";
 import { BRASSICA, HERB, LEAFY, SEA, SPROUT } from "./families/greens.ts";
 import { FRUITING, LEGUME, SQUASH } from "./families/fruits.ts";
+import { FRUIT, fruitForms } from "./families/fruit.ts";
 import { ALLIUM, MUSHROOM, ROOT, STEM, TUBER } from "./families/roots.ts";
 import { NUT, SEED, SPICE } from "./families/pantry.ts";
 import { roundRect } from "./shapes.ts";
@@ -41,6 +42,7 @@ const FAMILIES: Record<PlantCategory, readonly Draw[]> = {
   tuber: TUBER,
   allium: ALLIUM,
   fruiting: FRUITING,
+  fruit: FRUIT,
   legume: LEGUME,
   squash: SQUASH,
   stem: STEM,
@@ -143,6 +145,10 @@ export function plantIcon(plant: Plant): IconSpec {
   // mushroom pink, which ±30° did.
   const p = palette(plant.hue, d.f(-24, 24));
   const family = FAMILIES[plant.category];
+  // Fruit is the one family whose silhouettes portray a specific fruit instead
+  // of an abstract form, so a recognisable name narrows the pool before the
+  // hash picks from it. The three `d.i` draws stay in place, so nothing else moves.
+  const pool = (plant.category === "fruit" ? fruitForms(plant.name) : null) ?? family;
   const tilt = d.f(-9, 9);
   const scale = d.f(0.92, 1.06);
 
@@ -159,7 +165,7 @@ export function plantIcon(plant: Plant): IconSpec {
     gradient: GRADIENTS[d.i(0, GRADIENTS.length - 1)]!,
     pose: `translate(50 50) rotate(${tilt.toFixed(1)}) scale(${scale.toFixed(3)}) translate(-50 -50)`,
     tint: p.tint,
-    shapes: family[d.i(0, family.length - 1)]!(d, p),
+    shapes: pool[d.i(0, pool.length - 1)]!(d, p),
   };
   cache.set(plant.id, spec);
   return spec;

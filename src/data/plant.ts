@@ -19,6 +19,9 @@ export const CATEGORY_IDS = [
   "tuber",
   "allium",
   "fruiting",
+  // Sweet fruit sits next to the savoury "fruiting" vegetables it gets confused
+  // with, which is also why `cat.fruiting` reads "Fruit veg" in English.
+  "fruit",
   "legume",
   "squash",
   "stem",

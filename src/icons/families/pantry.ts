@@ -9,12 +9,7 @@
  */
 
 import { DEG, TAU, type Draw, type Shape } from "../spec.ts";
-import { arc, bar, blob, curve, disc, dome, leaf, lens, spiral, wave } from "../shapes.ts";
-
-/** `dome` turned over: the bowl half of an ellipse, for shells and settled heaps. */
-function cup(cx: number, cy: number, rx: number, ry: number): string {
-  return `${arc(cx, cy, rx, ry, 0, 180)}Z`;
-}
+import { arc, bar, blob, cup, curve, disc, dome, leaf, lens, spiral, wave } from "../shapes.ts";
 
 /**
  * A smooth ovoid, tall above the waist and blunt below. Two half-ellipses of

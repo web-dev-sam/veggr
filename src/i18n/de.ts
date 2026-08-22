@@ -168,6 +168,7 @@ export const de = {
   "cat.tuber": "Knollen",
   "cat.allium": "Zwiebeln",
   "cat.fruiting": "Fruchtgemüse",
+  "cat.fruit": "Obst",
   "cat.legume": "Hülsenfrüchte",
   "cat.squash": "Kürbis",
   "cat.stem": "Stiele",
