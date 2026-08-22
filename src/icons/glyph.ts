@@ -26,7 +26,7 @@ import { BRASSICA, HERB, LEAFY, SEA, SPROUT } from "./families/greens.ts";
 import { FRUITING, LEGUME, SQUASH } from "./families/fruits.ts";
 import { FRUIT, fruitForms } from "./families/fruit.ts";
 import { ALLIUM, MUSHROOM, ROOT, STEM, TUBER } from "./families/roots.ts";
-import { NUT, SEED, SPICE } from "./families/pantry.ts";
+import { NUT, SEED, SPICE, SWEET } from "./families/pantry.ts";
 import { roundRect } from "./shapes.ts";
 import type { Draw, Shape } from "./spec.ts";
 
@@ -50,6 +50,7 @@ const FAMILIES: Record<PlantCategory, readonly Draw[]> = {
   nut: NUT,
   seed: SEED,
   spice: SPICE,
+  sweet: SWEET,
 };
 
 /** Per-corner radii, clockwise from top-left, in the icon's 100-unit box. */

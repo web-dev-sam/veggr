@@ -1,15 +1,30 @@
 /**
- * Silhouettes for the dry store: nuts, seeds, spices.
+ * Silhouettes for the dry store and the sweet shelf: nuts, seeds, spices,
+ * syrups.
  *
- * These three categories fight the produce families' assumption that an item
- * has a distinctive outline. A peppercorn, a juniper berry and an allspice
- * corn are all "a dark sphere", and eighteen ground powders are all "a heap".
- * So the silhouettes here key off how the thing is *presented* — whole, split,
- * scattered, piled, rolled, ground — rather than off its botany.
+ * These categories fight the produce families' assumption that an item has a
+ * distinctive outline. A peppercorn, a juniper berry and an allspice corn are
+ * all "a dark sphere", eighteen ground powders are all "a heap", and a syrup
+ * has no shape at all until something holds it. So the silhouettes here key
+ * off how the thing is *presented* — whole, split, scattered, piled, rolled,
+ * ground, poured — rather than off its botany.
  */
 
 import { DEG, TAU, type Draw, type Shape } from "../spec.ts";
-import { arc, bar, blob, cup, curve, disc, dome, leaf, lens, spiral, wave } from "../shapes.ts";
+import {
+  arc,
+  bar,
+  blob,
+  cup,
+  curve,
+  disc,
+  dome,
+  leaf,
+  lens,
+  num,
+  spiral,
+  wave,
+} from "../shapes.ts";
 
 /**
  * A smooth ovoid, tall above the waist and blunt below. Two half-ellipses of
@@ -531,3 +546,209 @@ const pods: Draw = (d, p) => {
 };
 
 export const SPICE: readonly Draw[] = [mound, corns, quill, star, pods];
+
+/* ------------------------------------------------------------------ sweet */
+
+/** Regular hexagon, pointy top and bottom, so a row of them tiles as a comb. */
+function hexagon(cx: number, cy: number, r: number): string {
+  let path = "";
+  for (let i = 0; i < 6; i++) {
+    const a = (i * 60 + 30) * DEG;
+    path += `${i === 0 ? "M" : "L"}${num(cx + Math.cos(a) * r)} ${num(cy + Math.sin(a) * r)}`;
+  }
+  return `${path}Z`;
+}
+
+/** A thread breaking into a drop above its own pool — the class's one universal. */
+const pour: Draw = (d, p) => {
+  const baseY = d.f(70, 74);
+  const rx = d.f(26, 31);
+  const lift = d.f(7, 9);
+  const topY = d.f(15, 19);
+  const lean = d.f(-6, 6);
+  const surface = baseY - lift;
+  // The thread stops well short of the pool and a loose drop covers the gap.
+  // Run it all the way down and the glyph reads as a stalk on a mound.
+  const cut = surface - d.f(20, 26);
+
+  const shapes: Shape[] = [
+    // Pool: a low dome closed by a shallow cup, so the underside reads as
+    // liquid sitting on a surface rather than a slice through a ball.
+    { d: dome(50, baseY, rx, lift), fill: p.ink },
+    { d: cup(50, baseY, rx, d.f(3, 5)), fill: p.ink },
+    {
+      d: curve(50 + lean * 1.8, topY, 50 + lean * 2.4, (topY + cut) / 2, 50 + lean, cut),
+      stroke: p.ink,
+      width: d.f(5, 6.5),
+    },
+    { d: leaf(50 + lean, cut + d.f(7, 10), 90, d.f(11, 14), d.f(4, 5.2)), fill: p.ink },
+    {
+      d: arc(50, surface + lift * 0.5, rx * 0.5, lift * 0.45, 200, 340),
+      stroke: p.spark,
+      width: 2.4,
+      opacity: 0.55,
+    },
+  ];
+
+  // Beads that ran ahead of the pool: the two ends are what say "spreading".
+  for (const side of [-1, 1]) {
+    shapes.push({
+      d: disc(50 + side * rx * d.f(0.86, 1.08), baseY - d.f(0, 3), d.f(2.8, 4.2)),
+      fill: p.inkDeep,
+    });
+  }
+  return shapes;
+};
+
+/** An ovoid pot under its lid, filled to a line — honey, treacle, anything by the spoon. */
+const pot: Draw = (d, p) => {
+  const cy = d.f(58, 62);
+  const rx = d.f(21, 25);
+  const up = d.f(19, 23);
+  const down = d.f(22, 26);
+  const lidY = cy - up - d.f(2, 4);
+  const lidHalf = rx * d.f(0.74, 0.88);
+
+  return [
+    { d: egg(50, cy, rx, up, down), fill: p.ink },
+    // The fill line is what separates a pot from a plain egg at 32px.
+    {
+      d: wave(
+        50 - rx * 0.84,
+        50 + rx * 0.84,
+        cy - up * 0.36,
+        d.f(1.6, 2.6),
+        d.f(1, 1.6),
+        d.f(0, TAU),
+      ),
+      stroke: p.spark,
+      width: 2.6,
+      opacity: 0.6,
+    },
+    { d: disc(50 - rx * 0.4, cy + down * 0.14, d.f(3.4, 4.6)), fill: p.spark, opacity: 0.4 },
+    { d: bar(50 - lidHalf, lidY, 50 + lidHalf, lidY), stroke: p.inkDeep, width: d.f(6, 8) },
+    { d: disc(50 + d.f(-2, 2), lidY - d.f(6, 9), d.f(3, 4.2)), fill: p.inkDeep },
+  ];
+};
+
+/** Cells of comb with one of them running — honey at its most recognisable. */
+const comb: Draw = (d, p) => {
+  const r = d.f(14.5, 17);
+  const step = r * Math.sqrt(3);
+  // Axial cells, nearest first: taking a prefix always leaves the cluster joined.
+  const cells: readonly [number, number][] = [
+    [0, 0],
+    [1, 0],
+    [0, 1],
+    [-1, 1],
+    [-1, 0],
+    [1, -1],
+  ];
+  const count = d.i(4, 6);
+  const cx = 50 - d.f(4, 10);
+  const cy = 50 - d.f(2, 8);
+
+  const seats = cells.slice(0, count).map(([q, s]) => ({
+    x: cx + (q + s / 2) * step,
+    y: cy + s * r * 1.5,
+  }));
+
+  const shapes: Shape[] = seats.map((seat, i) => ({
+    d: hexagon(seat.x, seat.y, r * 0.93),
+    fill: i % 2 === 0 ? p.ink : p.inkDeep,
+  }));
+
+  const full = seats[d.i(0, seats.length - 1)]!;
+  shapes.push({ d: hexagon(full.x, full.y, r * 0.52), fill: p.spark, opacity: 0.6 });
+
+  const low = seats.reduce((a, b) => (b.y > a.y ? b : a));
+  shapes.push({
+    d: bar(low.x, low.y + r * 0.8, low.x + d.f(-2, 2), low.y + r * 1.5),
+    stroke: p.ink,
+    width: 3.4,
+  });
+  shapes.push({ d: disc(low.x + d.f(-2, 2), low.y + r * 1.8, d.f(4, 5.4)), fill: p.ink });
+  return shapes;
+};
+
+/** A pressed cone with a chunk broken off — jaggery, palm sugar, carob in a block. */
+const loaf: Draw = (d, p) => {
+  const baseY = d.f(74, 78);
+  const topY = d.f(28, 34);
+  const half = d.f(24, 28);
+  const crown = half * d.f(0.3, 0.42);
+  const cap = d.f(7, 10);
+  const cx = 50 - d.f(2, 7);
+
+  const body =
+    `M${num(cx - half)} ${num(baseY)}` +
+    `L${num(cx - crown)} ${num(topY)}` +
+    `Q${num(cx)} ${num(topY - cap)} ${num(cx + crown)} ${num(topY)}` +
+    `L${num(cx + half)} ${num(baseY)}Z`;
+
+  const shapes: Shape[] = [
+    { d: body, fill: p.ink },
+    { d: cup(cx, baseY, half, d.f(4, 6)), fill: p.ink },
+    // Broken chunk: the cone alone is a triangle, and a triangle is a plate.
+    {
+      d: blob(
+        cx + half * d.f(1.08, 1.24),
+        baseY - d.f(5, 9),
+        d.f(7.5, 10),
+        d.f(6.5, 9),
+        d.i(5, 7),
+        d.f(0.1, 0.2),
+        d,
+      ),
+      fill: p.inkDeep,
+    },
+  ];
+
+  const grains = d.i(3, 5);
+  for (let i = 0; i < grains; i++) {
+    const k = d.f(0.25, 0.9);
+    shapes.push({
+      d: disc(cx + d.f(-1, 1) * half * (1 - k) * 0.8, topY + (baseY - topY) * k, d.f(2.2, 3.2)),
+      fill: p.spark,
+      opacity: 0.45,
+    });
+  }
+  return shapes;
+};
+
+/** Ridges stacked on a stick, one drip hanging off it — the dipper. */
+const dipper: Draw = (d, p) => {
+  const tilt = d.f(-14, 14);
+  const dx = Math.sin(tilt * DEG);
+  const dy = Math.cos(tilt * DEG);
+  const headStart = d.f(0.4, 0.48);
+  const span = d.f(58, 64);
+  const x0 = 50 - dx * span * 0.5;
+  const y0 = d.f(14, 18);
+  const at = (t: number): [number, number] => [x0 + dx * span * t, y0 + dy * span * t];
+
+  const [hx, hy] = at(headStart);
+  const [tx, ty] = at(1);
+  const shapes: Shape[] = [
+    { d: bar(x0, y0, hx, hy), stroke: p.inkDeep, width: d.f(4, 5) },
+    // Head core: without a body behind them the ridges read as loose beads.
+    { d: bar(hx, hy, tx, ty), stroke: p.inkDeep, width: d.f(9, 11) },
+  ];
+
+  // Ridges run *across* the shaft — that crosswise repeat is the whole read.
+  const ridges = d.i(3, 4);
+  for (let i = 0; i < ridges; i++) {
+    const [x, y] = at(headStart + ((i + 0.5) / ridges) * (1 - headStart) * 0.94);
+    shapes.push({
+      d: lens(x, y, tilt, d.f(20, 25), d.f(6, 7.5)),
+      fill: i % 2 === 0 ? p.ink : p.inkDeep,
+    });
+  }
+
+  const dripY = ty + d.f(6, 10);
+  shapes.push({ d: leaf(tx, ty + 2, 90, dripY - ty, d.f(3.4, 4.6)), fill: p.ink });
+  shapes.push({ d: disc(tx + d.f(-2, 2), dripY + d.f(3, 6), d.f(3, 4.2)), fill: p.spark });
+  return shapes;
+};
+
+export const SWEET: readonly Draw[] = [pour, pot, comb, loaf, dipper];

@@ -32,6 +32,9 @@ export const CATEGORY_IDS = [
   "nut",
   "seed",
   "spice",
+  // Syrups and nectars: the shelf next to the spice rack, and the only class
+  // whose entries are a plant reduced to a jar rather than the plant itself.
+  "sweet",
 ] as const;
 
 export type PlantCategory = (typeof CATEGORY_IDS)[number];
