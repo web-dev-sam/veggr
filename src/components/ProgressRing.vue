@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * A dial for one number against its target. Over-target keeps filling a second,
- * brighter lap instead of clamping, because eating more vegetables than planned
+ * brighter lap instead of clamping, because eating more plants than planned
  * deserves to look like something.
  */
 import { computed } from "vue";

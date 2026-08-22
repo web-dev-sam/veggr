@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/greens.ts`. */
-export const GREENS_DE: VegLocale = {
+/** German names for `src/data/plants/greens.ts`. */
+export const GREENS_DE: PlantLocale = {
   "amaranth-leaves": {
     name: "Amarantblätter",
     aliases: ["amaranth", "amarant", "chinesischer spinat", "callaloo"],

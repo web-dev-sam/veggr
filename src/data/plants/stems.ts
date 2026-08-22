@@ -1,7 +1,7 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /** Edible stems, shoots, stalks and buds, plus the cultivated and wild fungi. */
-export const STEMS: Vegetable[] = [
+export const STEMS: Plant[] = [
   {
     id: "agretti",
     name: "Agretti",

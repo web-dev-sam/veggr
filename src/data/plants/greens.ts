@@ -1,7 +1,7 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /** Leaves eaten as leaves, plus the cabbage-family heads, florets and stems. */
-export const GREENS: Vegetable[] = [
+export const GREENS: Plant[] = [
   {
     id: "amaranth-leaves",
     name: "Amaranth Leaves",

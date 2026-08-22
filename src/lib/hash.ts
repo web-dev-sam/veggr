@@ -1,7 +1,7 @@
 /**
  * Deterministic seeding for generated art.
  *
- * Every icon in the app is derived from a vegetable id, so the same id must
+ * Every icon in the app is derived from a plant id, so the same id must
  * always produce the same glyph — across sessions, devices and releases.
  * That rules out `Math.random()` and rules in a hash plus a tiny PRNG.
  */

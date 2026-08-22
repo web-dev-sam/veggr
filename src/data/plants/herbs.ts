@@ -1,7 +1,7 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /** Culinary herbs, sprouted shoots and edible seaweeds. */
-export const HERBS: Vegetable[] = [
+export const HERBS: Plant[] = [
   {
     id: "agar-seaweed",
     name: "Agar Seaweed",

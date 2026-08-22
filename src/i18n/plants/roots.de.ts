@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/roots.ts`. */
-export const ROOTS_DE: VegLocale = {
+/** German names for `src/data/plants/roots.ts`. */
+export const ROOTS_DE: PlantLocale = {
   arrowroot: { name: "Pfeilwurz", aliases: ["pfeilwurzel", "maranta"] },
   beetroot: {
     name: "Rote Bete",

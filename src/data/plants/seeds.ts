@@ -1,10 +1,10 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /**
  * Seeds eaten as food in their own right — a portion, not a pinch. Seeds used
  * only to season a dish (cumin, caraway, mustard) live in `spices.ts`.
  */
-export const SEEDS: Vegetable[] = [
+export const SEEDS: Plant[] = [
   {
     id: "amaranth-grain",
     name: "Amaranth Grain",

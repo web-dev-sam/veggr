@@ -22,7 +22,7 @@ export type Shape = {
  * single silhouette is not enough: at 54px, forty leafy vegetables drawn as the
  * same fan of leaves in the same green read as forty copies. Different
  * silhouettes are what actually make them tellable apart, so each family offers
- * a handful and the vegetable's hash picks one.
+ * a handful and the plant's hash picks one.
  */
 export type Draw = (d: Dice, p: Palette) => Shape[];
 

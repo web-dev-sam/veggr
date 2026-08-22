@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/herbs.ts`. */
-export const HERBS_DE: VegLocale = {
+/** German names for `src/data/plants/herbs.ts`. */
+export const HERBS_DE: PlantLocale = {
   "agar-seaweed": { name: "Agar-Alge", aliases: ["agar-agar", "gracilaria", "ogonori"] },
   "alfalfa-sprouts": {
     name: "Alfalfasprossen",

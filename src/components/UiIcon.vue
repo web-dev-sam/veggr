@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * The interface icon set — one stroke path each, drawn on a 24px grid.
- * Vegetable icons come from the generator; these are the chrome around it.
+ * Plant icons come from the generator; these are the chrome around it.
  */
 
 const PATHS = {

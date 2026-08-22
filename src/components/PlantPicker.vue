@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Choosing what went in. Since a day is a *set* of vegetables, every row is a
+ * Choosing what went in. Since a day is a *set* of plants, every row is a
  * toggle and the sheet deliberately stays open: recalling a meal means ticking
  * off four or five things in a row, not four or five separate trips.
  *
@@ -8,9 +8,9 @@
  * tapping again is the undo.
  */
 import { computed, ref } from "vue";
-import { VEGETABLES, searchVegetables, vegetable } from "../data/catalog.ts";
-import { type Vegetable } from "../data/vegetable.ts";
-import { categoryLabel, t, vegName } from "../i18n/index.ts";
+import { PLANTS, searchPlants, plantById } from "../data/catalog.ts";
+import { type Plant } from "../data/plant.ts";
+import { categoryLabel, t, plantName } from "../i18n/index.ts";
 import { kinds } from "../lib/format.ts";
 import {
   entries,
@@ -21,40 +21,40 @@ import {
   toggleLog,
 } from "../stores/log.ts";
 import UiIcon from "./UiIcon.vue";
-import VegIcon from "./VegIcon.vue";
+import PlantIcon from "./PlantIcon.vue";
 
 const props = defineProps<{ day: string }>();
 
 const query = ref("");
 
-const results = computed(() => searchVegetables(query.value));
+const results = computed(() => searchPlants(query.value));
 
 const dayStats = computed(() => statsForDay(props.day));
 
-/** Distinct vegetables from the newest entries — what they reached for lately. */
+/** Distinct plants from the newest entries — what they reached for lately. */
 const recent = computed(() => {
-  const picks: Vegetable[] = [];
+  const picks: Plant[] = [];
   for (const entry of [...entries].sort((a, b) => b.at - a.at)) {
     if (picks.length >= 10) break;
-    if (picks.some((veg) => veg.id === entry.vegId)) continue;
-    const veg = vegetable(entry.vegId);
-    if (veg) picks.push(veg);
+    if (picks.some((plant) => plant.id === entry.plantId)) continue;
+    const plant = plantById(entry.plantId);
+    if (plant) picks.push(plant);
   }
   return picks;
 });
 
 const regulars = computed(() =>
   favourites.value
-    .filter((row) => row.days > 1 && !recent.value.some((veg) => veg.id === row.veg.id))
+    .filter((row) => row.days > 1 && !recent.value.some((plant) => plant.id === row.plant.id))
     .slice(0, 8)
-    .map((row) => row.veg),
+    .map((row) => row.plant),
 );
 
 /** Never logged, in the current result order — the nudge towards the other 200-odd. */
-const untried = computed(() => results.value.filter((veg) => !firstLogged.value.has(veg.id)));
+const untried = computed(() => results.value.filter((plant) => !firstLogged.value.has(plant.id)));
 
-function on(veg: Vegetable): boolean {
-  return isLogged(veg.id, props.day);
+function on(plant: Plant): boolean {
+  return isLogged(plant.id, props.day);
 }
 </script>
 
@@ -66,7 +66,7 @@ function on(veg: Vegetable): boolean {
       type="search"
       enterkeyhint="search"
       autocomplete="off"
-      :placeholder="t('catalog.search', { n: VEGETABLES.length })"
+      :placeholder="t('catalog.search', { n: PLANTS.length })"
     />
     <button
       v-if="query"
@@ -88,18 +88,18 @@ function on(veg: Vegetable): boolean {
       <p class="eyebrow">{{ t("picker.again") }}</p>
       <div class="scroller">
         <button
-          v-for="veg in recent"
-          :key="veg.id"
+          v-for="plant in recent"
+          :key="plant.id"
           class="quick"
-          :class="{ 'quick--on': on(veg) }"
-          :aria-pressed="on(veg)"
-          @click="toggleLog(veg.id, props.day)"
+          :class="{ 'quick--on': on(plant) }"
+          :aria-pressed="on(plant)"
+          @click="toggleLog(plant.id, props.day)"
         >
           <span class="quick__art">
-            <VegIcon :veg="veg" :size="46" :selected="on(veg)" />
-            <span v-if="on(veg)" class="quick__tick"><UiIcon name="check" :size="12" /></span>
+            <PlantIcon :plant="plant" :size="46" :selected="on(plant)" />
+            <span v-if="on(plant)" class="quick__tick"><UiIcon name="check" :size="12" /></span>
           </span>
-          <span class="truncate">{{ vegName(veg) }}</span>
+          <span class="truncate">{{ plantName(plant) }}</span>
         </button>
       </div>
     </section>
@@ -108,18 +108,18 @@ function on(veg: Vegetable): boolean {
       <p class="eyebrow">{{ t("picker.regulars") }}</p>
       <div class="scroller">
         <button
-          v-for="veg in regulars"
-          :key="veg.id"
+          v-for="plant in regulars"
+          :key="plant.id"
           class="quick"
-          :class="{ 'quick--on': on(veg) }"
-          :aria-pressed="on(veg)"
-          @click="toggleLog(veg.id, props.day)"
+          :class="{ 'quick--on': on(plant) }"
+          :aria-pressed="on(plant)"
+          @click="toggleLog(plant.id, props.day)"
         >
           <span class="quick__art">
-            <VegIcon :veg="veg" :size="46" :selected="on(veg)" />
-            <span v-if="on(veg)" class="quick__tick"><UiIcon name="check" :size="12" /></span>
+            <PlantIcon :plant="plant" :size="46" :selected="on(plant)" />
+            <span v-if="on(plant)" class="quick__tick"><UiIcon name="check" :size="12" /></span>
           </span>
-          <span class="truncate">{{ vegName(veg) }}</span>
+          <span class="truncate">{{ plantName(plant) }}</span>
         </button>
       </div>
     </section>
@@ -135,19 +135,19 @@ function on(veg: Vegetable): boolean {
     </p>
     <div class="card card--flush">
       <button
-        v-for="veg in results"
-        :key="veg.id"
+        v-for="plant in results"
+        :key="plant.id"
         class="pick"
-        :class="{ 'pick--on': on(veg) }"
-        :aria-pressed="on(veg)"
-        @click="toggleLog(veg.id, props.day)"
+        :class="{ 'pick--on': on(plant) }"
+        :aria-pressed="on(plant)"
+        @click="toggleLog(plant.id, props.day)"
       >
-        <VegIcon :veg="veg" :size="38" />
-        <span class="grow truncate">{{ vegName(veg) }}</span>
-        <span v-if="!firstLogged.has(veg.id)" class="tag">{{ t("picker.new") }}</span>
-        <span v-else class="faint cat">{{ categoryLabel(veg.category) }}</span>
-        <span class="box" :class="{ 'box--on': on(veg) }">
-          <UiIcon v-if="on(veg)" name="check" :size="15" />
+        <PlantIcon :plant="plant" :size="38" />
+        <span class="grow truncate">{{ plantName(plant) }}</span>
+        <span v-if="!firstLogged.has(plant.id)" class="tag">{{ t("picker.new") }}</span>
+        <span v-else class="faint cat">{{ categoryLabel(plant.category) }}</span>
+        <span class="box" :class="{ 'box--on': on(plant) }">
+          <UiIcon v-if="on(plant)" name="check" :size="15" />
         </span>
       </button>
       <p v-if="!results.length" class="empty">{{ t("picker.noMatch", { query }) }}</p>

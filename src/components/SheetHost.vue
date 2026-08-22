@@ -9,7 +9,7 @@ import { dayLabelCasual } from "../lib/date.ts";
 import { closeSheet, sheet } from "../stores/ui.ts";
 import BottomSheet from "./BottomSheet.vue";
 import SettingsSheet from "./SettingsSheet.vue";
-import VegPicker from "./VegPicker.vue";
+import PlantPicker from "./PlantPicker.vue";
 
 const picker = computed(() => (sheet.value.kind === "picker" ? sheet.value : null));
 
@@ -21,7 +21,7 @@ const pickerTitle = computed(() =>
 
 <template>
   <BottomSheet :open="!!picker" tall :title="pickerTitle" @close="closeSheet">
-    <VegPicker v-if="picker" :day="picker.day" />
+    <PlantPicker v-if="picker" :day="picker.day" />
   </BottomSheet>
 
   <BottomSheet :open="sheet.kind === 'settings'" :title="t('sheet.targets')" @close="closeSheet">

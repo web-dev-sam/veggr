@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/spices.ts`. */
-export const SPICES_DE: VegLocale = {
+/** German names for `src/data/plants/spices.ts`. */
+export const SPICES_DE: PlantLocale = {
   ajwain: { name: "Ajowan", aliases: ["königskümmel", "indischer thymian", "ajwain", "carom"] },
   "aleppo-pepper": {
     name: "Aleppo-Pfeffer",

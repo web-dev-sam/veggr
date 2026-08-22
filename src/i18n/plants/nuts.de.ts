@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/nuts.ts`. */
-export const NUTS_DE: VegLocale = {
+/** German names for `src/data/plants/nuts.ts`. */
+export const NUTS_DE: PlantLocale = {
   acorn: { name: "Eichel", aliases: ["eicheln", "eichelkerne", "acorn"] },
   almond: { name: "Mandel", aliases: ["mandeln", "mandelkerne", "süßmandel", "almond"] },
   "baru-nut": { name: "Barunuss", aliases: ["baru", "barunüsse", "cumbaru", "baru nut"] },

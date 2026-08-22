@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/fruiting.ts`. */
-export const FRUITING_DE: VegLocale = {
+/** German names for `src/data/plants/fruiting.ts`. */
+export const FRUITING_DE: PlantLocale = {
   "acorn-squash": {
     name: "Eichelkürbis",
     aliases: ["acorn squash", "acorn", "eichel kürbis"],

@@ -1,7 +1,7 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /** Fruits eaten as vegetables, edible pods and beans, and the squash family. */
-export const FRUITING: Vegetable[] = [
+export const FRUITING: Plant[] = [
   {
     id: "acorn-squash",
     name: "Acorn Squash",

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * Two targets and a language. Anything more would be a preferences screen, and
- * a vegetable tracker does not need one.
+ * a plant tracker does not need one.
  */
 import { ref } from "vue";
 import { LOCALE_NAMES, LOCALES, setLocale, t } from "../i18n/index.ts";

@@ -1,6 +1,6 @@
 /**
  * User preferences: two targets and a language. The targets exist because the
- * app makes exactly two promises — eat several different vegetables today, and
+ * app makes exactly two promises — eat several different plants today, and
  * many different ones this week.
  */
 
@@ -10,11 +10,11 @@ import { reactive, watch } from "vue";
 const KEY = "veggr.settings.v1";
 
 export type Settings = {
-  /** Different vegetables per day. */
+  /** Different plants per day. */
   dailyVariety: number;
-  /** Different vegetables per week — the "30 plants" challenge target. */
+  /** Different plants per week — the "30 plants" challenge target. */
   weeklyVariety: number;
-  /** Interface and vegetable names. */
+  /** Interface and plant names. */
   locale: Locale;
 };
 

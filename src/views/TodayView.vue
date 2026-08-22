@@ -1,17 +1,17 @@
 <script setup lang="ts">
 /**
  * The default screen, and the one that has to work in three seconds while
- * standing at a chopping board: how many different vegetables so far, tap to
+ * standing at a chopping board: how many different plants so far, tap to
  * tick off the usual ones, and a correctable list of what is on today.
  */
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import ProgressRing from "../components/ProgressRing.vue";
 import UiIcon from "../components/UiIcon.vue";
-import VegIcon from "../components/VegIcon.vue";
-import { vegetable } from "../data/catalog.ts";
-import type { Vegetable } from "../data/vegetable.ts";
-import { t, vegName } from "../i18n/index.ts";
+import PlantIcon from "../components/PlantIcon.vue";
+import { plantById } from "../data/catalog.ts";
+import type { Plant } from "../data/plant.ts";
+import { t, plantName } from "../i18n/index.ts";
 import { currentDay } from "../lib/clock.ts";
 import { clockTime, fromDayKey, shortDate, weekdayShort } from "../lib/date.ts";
 import { kinds, pct } from "../lib/format.ts";
@@ -42,12 +42,13 @@ const date = computed(() => {
  * here: what you ate yesterday is the best guess for what is in the fridge.
  */
 const quick = computed(() => {
-  const picks: Vegetable[] = [];
-  const add = (veg: Vegetable | undefined): void => {
-    if (veg && picks.length < 10 && !picks.some((seen) => seen.id === veg.id)) picks.push(veg);
+  const picks: Plant[] = [];
+  const add = (plant: Plant | undefined): void => {
+    if (plant && picks.length < 10 && !picks.some((seen) => seen.id === plant.id))
+      picks.push(plant);
   };
-  for (const entry of [...entries].sort((a, b) => b.at - a.at)) add(vegetable(entry.vegId));
-  for (const id of STARTERS) add(vegetable(id));
+  for (const entry of [...entries].sort((a, b) => b.at - a.at)) add(plantById(entry.plantId));
+  for (const id of STARTERS) add(plantById(id));
   return picks;
 });
 
@@ -56,14 +57,14 @@ const remaining = computed(() => Math.max(0, settings.dailyVariety - today.value
 const newToday = computed(() => firstsOn(currentDay.value).length);
 
 /**
- * Entries paired with their vegetable. The store already drops entries whose id
+ * Entries paired with their plant. The store already drops entries whose id
  * has left the catalogue, but resolving once here keeps the template free of
  * non-null assertions.
  */
 const logLines = computed(() =>
   today.value.entries.flatMap((entry) => {
-    const veg = vegetable(entry.vegId);
-    return veg ? [{ entry, veg }] : [];
+    const plant = plantById(entry.plantId);
+    return plant ? [{ entry, plant }] : [];
   }),
 );
 
@@ -74,9 +75,11 @@ const logLines = computed(() =>
  * Removing works on the kind, not the entry — the list holds one row per kind,
  * so there is nothing else it could mean.
  */
-function drop(veg: Vegetable): void {
-  toggleLog(veg.id, currentDay.value);
-  notify(t("toast.removed", { name: vegName(veg) }), () => toggleLog(veg.id, currentDay.value));
+function drop(plant: Plant): void {
+  toggleLog(plant.id, currentDay.value);
+  notify(t("toast.removed", { name: plantName(plant) }), () =>
+    toggleLog(plant.id, currentDay.value),
+  );
 }
 </script>
 
@@ -142,25 +145,25 @@ function drop(veg: Vegetable): void {
       <p class="eyebrow">{{ t("today.oneTap") }}</p>
       <div class="scroller">
         <button
-          v-for="veg in quick"
-          :key="veg.id"
+          v-for="plant in quick"
+          :key="plant.id"
           class="quick"
-          :class="{ 'quick--on': isLogged(veg.id, currentDay) }"
-          :aria-pressed="isLogged(veg.id, currentDay)"
+          :class="{ 'quick--on': isLogged(plant.id, currentDay) }"
+          :aria-pressed="isLogged(plant.id, currentDay)"
           :aria-label="
-            isLogged(veg.id, currentDay)
-              ? t('plant.onList', { name: vegName(veg) })
-              : t('plant.tapAdd', { name: vegName(veg) })
+            isLogged(plant.id, currentDay)
+              ? t('plant.onList', { name: plantName(plant) })
+              : t('plant.tapAdd', { name: plantName(plant) })
           "
-          @click="toggleLog(veg.id)"
+          @click="toggleLog(plant.id)"
         >
           <span class="quick__art">
-            <VegIcon :veg="veg" :size="52" :selected="isLogged(veg.id, currentDay)" />
-            <span v-if="isLogged(veg.id, currentDay)" class="quick__tick">
+            <PlantIcon :plant="plant" :size="52" :selected="isLogged(plant.id, currentDay)" />
+            <span v-if="isLogged(plant.id, currentDay)" class="quick__tick">
               <UiIcon name="check" :size="13" />
             </span>
           </span>
-          <span class="truncate">{{ vegName(veg) }}</span>
+          <span class="truncate">{{ plantName(plant) }}</span>
         </button>
       </div>
     </section>
@@ -172,18 +175,18 @@ function drop(veg: Vegetable): void {
       </div>
 
       <div v-if="today.items.length" class="strip">
-        <VegIcon v-for="veg in today.items" :key="veg.id" :veg="veg" :size="30" />
+        <PlantIcon v-for="plant in today.items" :key="plant.id" :plant="plant" :size="30" />
       </div>
 
       <div v-if="logLines.length" class="card card--flush">
         <div v-for="line in logLines" :key="line.entry.id" class="line">
-          <VegIcon :veg="line.veg" :size="38" />
-          <span class="grow truncate">{{ vegName(line.veg) }}</span>
+          <PlantIcon :plant="line.plant" :size="38" />
+          <span class="grow truncate">{{ plantName(line.plant) }}</span>
           <span class="faint num time">{{ clockTime(line.entry.at) }}</span>
           <button
             class="btn btn--icon btn--ghost drop"
-            :aria-label="t('plant.remove', { name: vegName(line.veg) })"
-            @click="drop(line.veg)"
+            :aria-label="t('plant.remove', { name: plantName(line.plant) })"
+            @click="drop(line.plant)"
           >
             <UiIcon name="close" :size="17" />
           </button>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * The catalogue: every vegetable as one browsable wall of generated icons,
+ * The catalogue: every plant as one browsable wall of generated icons,
  * and the shortest path to logging something you have never eaten.
  *
  * Search and the category chips compose, because "herbs starting with s" is a
@@ -11,38 +11,38 @@
  */
 import { computed, ref } from "vue";
 import UiIcon from "../components/UiIcon.vue";
-import VegIcon from "../components/VegIcon.vue";
-import { VEGETABLES, searchVegetables } from "../data/catalog.ts";
-import { CATEGORY_IDS, type VegCategory, type Vegetable } from "../data/vegetable.ts";
-import { categoryLabel, t, vegName } from "../i18n/index.ts";
-import { vegIcon } from "../icons/glyph.ts";
+import PlantIcon from "../components/PlantIcon.vue";
+import { PLANTS, searchPlants } from "../data/catalog.ts";
+import { CATEGORY_IDS, type PlantCategory, type Plant } from "../data/plant.ts";
+import { categoryLabel, t, plantName } from "../i18n/index.ts";
+import { plantIcon } from "../icons/glyph.ts";
 import { pct } from "../lib/format.ts";
 import { discovered, firstLogged, today, toggleLog } from "../stores/log.ts";
 import { notify } from "../stores/toast.ts";
 
 /** One grid of tiles. A label means it gets a sticky heading above it. */
-type Block = { key: string; label: string | null; items: Vegetable[] };
+type Block = { key: string; label: string | null; items: Plant[] };
 
 const query = ref("");
-const category = ref<VegCategory | "all">("all");
+const category = ref<PlantCategory | "all">("all");
 const showFilters = ref(true);
 const input = ref<HTMLInputElement | null>(null);
 
 const searching = computed(() => query.value.trim().length > 0);
 
 const matches = computed(() => {
-  const found = searchVegetables(query.value);
+  const found = searchPlants(query.value);
   const pick = category.value;
-  return pick === "all" ? found : found.filter((veg) => veg.category === pick);
+  return pick === "all" ? found : found.filter((plant) => plant.category === pick);
 });
 
 /** The catalogue is alphabetical, so every bucket comes out sorted for free. */
 const grouped = computed<Block[]>(() => {
-  const buckets = new Map<VegCategory, Vegetable[]>();
-  for (const veg of matches.value) {
-    const bucket = buckets.get(veg.category);
-    if (bucket) bucket.push(veg);
-    else buckets.set(veg.category, [veg]);
+  const buckets = new Map<PlantCategory, Plant[]>();
+  for (const plant of matches.value) {
+    const bucket = buckets.get(plant.category);
+    if (bucket) bucket.push(plant);
+    else buckets.set(plant.category, [plant]);
   }
 
   const blocks: Block[] = [];
@@ -58,8 +58,8 @@ const blocks = computed<Block[]>(() => {
   return searching.value ? [{ key: "matches", label: null, items: matches.value }] : grouped.value;
 });
 
-const triedPct = computed(() => pct(discovered.value, VEGETABLES.length));
-const untried = computed(() => VEGETABLES.length - discovered.value);
+const triedPct = computed(() => pct(discovered.value, PLANTS.length));
+const untried = computed(() => PLANTS.length - discovered.value);
 
 const hint = computed(() => {
   if (discovered.value === 0) return t("catalog.hintNone");
@@ -86,25 +86,25 @@ const emptyLine = computed(() => {
 
 /**
  * Today's ids in one pass. `isLogged` walks the whole log per call, and the
- * wall renders every vegetable at once, so the tiles read a set instead.
+ * wall renders every plant at once, so the tiles read a set instead.
  */
-const onToday = computed(() => new Set(today.value.items.map((veg) => veg.id)));
+const onToday = computed(() => new Set(today.value.items.map((plant) => plant.id)));
 
 /** One tap is the whole interaction: on the list, or off it again. */
-function tap(veg: Vegetable): void {
-  const added = toggleLog(veg.id);
-  const name = vegName(veg);
+function tap(plant: Plant): void {
+  const added = toggleLog(plant.id);
+  const name = plantName(plant);
   const text = added ? t("toast.addedToday", { name }) : t("toast.removedToday", { name });
   notify(text, () => {
-    toggleLog(veg.id);
+    toggleLog(plant.id);
   });
 }
 
 /** The tile's name plus both states its badges carry visually. */
-function tileLabel(veg: Vegetable): string {
-  const name = vegName(veg);
-  if (onToday.value.has(veg.id)) return t("plant.onList", { name });
-  if (firstLogged.value.has(veg.id)) return t("plant.triedTapAdd", { name });
+function tileLabel(plant: Plant): string {
+  const name = plantName(plant);
+  if (onToday.value.has(plant.id)) return t("plant.onList", { name });
+  if (firstLogged.value.has(plant.id)) return t("plant.triedTapAdd", { name });
   return t("plant.tapAdd", { name });
 }
 
@@ -143,7 +143,7 @@ function toggleFilters(): void {
       <div class="row tally__head">
         <p class="grow tally__line">
           <span class="num tally__count">{{ discovered }}</span>
-          <span class="dim tally__of">{{ t("catalog.ofTried", { n: VEGETABLES.length }) }}</span>
+          <span class="dim tally__of">{{ t("catalog.ofTried", { n: PLANTS.length }) }}</span>
         </p>
         <span class="num faint tally__pct">{{ triedPct }}%</span>
       </div>
@@ -160,7 +160,7 @@ function toggleFilters(): void {
           ref="input"
           v-model="query"
           type="search"
-          :placeholder="t('catalog.search', { n: VEGETABLES.length })"
+          :placeholder="t('catalog.search', { n: PLANTS.length })"
           :aria-label="t('catalog.searchAria')"
           autocomplete="off"
           autocapitalize="off"
@@ -218,26 +218,31 @@ function toggleFilters(): void {
       </div>
       <div class="grid">
         <button
-          v-for="veg in block.items"
-          :key="veg.id"
+          v-for="plant in block.items"
+          :key="plant.id"
           class="tile"
-          :class="{ 'tile--on': onToday.has(veg.id) }"
-          :aria-label="tileLabel(veg)"
-          :aria-pressed="onToday.has(veg.id)"
-          @click="tap(veg)"
+          :class="{ 'tile--on': onToday.has(plant.id) }"
+          :aria-label="tileLabel(plant)"
+          :aria-pressed="onToday.has(plant.id)"
+          @click="tap(plant)"
         >
           <span class="tile__art">
-            <VegIcon :veg="veg" :size="54" :selected="onToday.has(veg.id)" aria-hidden="true" />
-            <span
-              v-if="firstLogged.has(veg.id)"
-              class="tile__mark"
-              :style="{ background: vegIcon(veg).tint }"
+            <PlantIcon
+              :plant="plant"
+              :size="54"
+              :selected="onToday.has(plant.id)"
+              aria-hidden="true"
             />
-            <span v-if="onToday.has(veg.id)" class="tile__check">
+            <span
+              v-if="firstLogged.has(plant.id)"
+              class="tile__mark"
+              :style="{ background: plantIcon(plant).tint }"
+            />
+            <span v-if="onToday.has(plant.id)" class="tile__check">
               <UiIcon name="check" :size="12" />
             </span>
           </span>
-          <span class="tile__name">{{ vegName(veg) }}</span>
+          <span class="tile__name">{{ plantName(plant) }}</span>
         </button>
       </div>
     </section>
@@ -422,7 +427,7 @@ function toggleFilters(): void {
 }
 
 /*
- * Opposite end of the diagonal from the dot, because a vegetable on today's
+ * Opposite end of the diagonal from the dot, because a plant on today's
  * list has always been tried: both badges show at once and must not overlap.
  */
 .tile__check {

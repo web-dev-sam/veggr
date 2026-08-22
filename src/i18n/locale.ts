@@ -19,9 +19,9 @@ export function isLocale(value: unknown): value is Locale {
 }
 
 /**
- * Translated names for part of the catalogue, keyed by vegetable id.
+ * Translated names for part of the catalogue, keyed by plant id.
  *
  * `aliases` is optional and *additive*: the English aliases stay searchable in
  * every locale, because a German user who types "kale" still means Grünkohl.
  */
-export type VegLocale = Record<string, { name: string; aliases?: string[] }>;
+export type PlantLocale = Record<string, { name: string; aliases?: string[] }>;

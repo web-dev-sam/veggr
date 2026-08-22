@@ -1,7 +1,7 @@
-import type { VegLocale } from "../locale.ts";
+import type { PlantLocale } from "../locale.ts";
 
-/** German names for `src/data/veg/stems.ts`. */
-export const STEMS_DE: VegLocale = {
+/** German names for `src/data/plants/stems.ts`. */
+export const STEMS_DE: PlantLocale = {
   agretti: { name: "Agretti", aliases: ["mönchsbart", "salzkraut", "barba di frate"] },
   asparagus: { name: "Grüner Spargel", aliases: ["spargel", "grünspargel", "spargelstangen"] },
   "bamboo-shoots": { name: "Bambussprossen", aliases: ["bambus", "bambusspitzen", "takenoko"] },

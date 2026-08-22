@@ -19,7 +19,7 @@
  * they only have to tell the icons apart at a glance.
  */
 
-import type { VegCategory, Vegetable } from "../data/vegetable.ts";
+import type { PlantCategory, Plant } from "../data/plant.ts";
 import { palette } from "../lib/color.ts";
 import { dice } from "../lib/hash.ts";
 import { BRASSICA, HERB, LEAFY, SEA, SPROUT } from "./families/greens.ts";
@@ -31,7 +31,7 @@ import type { Draw, Shape } from "./spec.ts";
 
 export type { Shape } from "./spec.ts";
 
-const FAMILIES: Record<VegCategory, readonly Draw[]> = {
+const FAMILIES: Record<PlantCategory, readonly Draw[]> = {
   leafy: LEAFY,
   brassica: BRASSICA,
   herb: HERB,
@@ -132,17 +132,17 @@ const cache = new Map<string, IconSpec>();
 
 /**
  * Icons render in long scrolling lists, so specs are memoised by id: the trig
- * and path building happens once per vegetable per session.
+ * and path building happens once per plant per session.
  */
-export function vegIcon(veg: Vegetable): IconSpec {
-  const cached = cache.get(veg.id);
+export function plantIcon(plant: Plant): IconSpec {
+  const cached = cache.get(plant.id);
   if (cached) return cached;
 
-  const d = dice(veg.id);
+  const d = dice(plant.id);
   // ±24° separates the 47 near-identical greens without turning a brown
   // mushroom pink, which ±30° did.
-  const p = palette(veg.hue, d.f(-24, 24));
-  const family = FAMILIES[veg.category];
+  const p = palette(plant.hue, d.f(-24, 24));
+  const family = FAMILIES[plant.category];
   const tilt = d.f(-9, 9);
   const scale = d.f(0.92, 1.06);
 
@@ -161,6 +161,6 @@ export function vegIcon(veg: Vegetable): IconSpec {
     tint: p.tint,
     shapes: family[d.i(0, family.length - 1)]!(d, p),
   };
-  cache.set(veg.id, spec);
+  cache.set(plant.id, spec);
   return spec;
 }

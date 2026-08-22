@@ -6,7 +6,7 @@
  * carries the day it writes to, which is what makes "add to yesterday" work
  * without a second code path.
  *
- * There is no amount sheet: picking a vegetable *is* logging it.
+ * There is no amount sheet: picking a plant *is* logging it.
  */
 
 import { ref } from "vue";

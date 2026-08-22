@@ -1,7 +1,7 @@
 /**
  * Palette derivation.
  *
- * The catalogue stores a plain sRGB/HSL hue per vegetable because that is what
+ * The catalogue stores a plain sRGB/HSL hue per plant because that is what
  * a human can eyeball ("carrot is 28"). Rendering straight from HSL looks
  * broken though: `hsl(60 90% 60%)` (yellow) reads far brighter than
  * `hsl(280 90% 60%)` (purple) at the same lightness, so a list of icons would

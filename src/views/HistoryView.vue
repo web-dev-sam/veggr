@@ -8,9 +8,9 @@
  */
 import { computed, ref } from "vue";
 import UiIcon from "../components/UiIcon.vue";
-import VegIcon from "../components/VegIcon.vue";
-import { VEGETABLES } from "../data/catalog.ts";
-import { t, vegName } from "../i18n/index.ts";
+import PlantIcon from "../components/PlantIcon.vue";
+import { PLANTS } from "../data/catalog.ts";
+import { t, plantName } from "../i18n/index.ts";
 import { dayLabel, weekLabel, weekdayShort } from "../lib/date.ts";
 import { kinds, pct } from "../lib/format.ts";
 import { discovered, firstsOn, loggedDays, loggedWeeks, streak } from "../stores/log.ts";
@@ -19,7 +19,7 @@ import { openPicker } from "../stores/ui.ts";
 
 /** Icons shown inline on a collapsed day row before the "+N" overflow chip. */
 const STRIP_MAX = 6;
-/** Top vegetables listed when a week is expanded. */
+/** Top plants listed when a week is expanded. */
 const WEEK_ITEMS_MAX = 10;
 /** Tallest mini-chart column, in px. Heights stay proportional. */
 const BAR_SPAN = 44;
@@ -31,9 +31,9 @@ const mode = ref<"days" | "weeks">("days");
 const openDay = ref<string | null>(null);
 const openWeek = ref<string | null>(null);
 
-const discoveredPct = computed(() => pct(discovered.value, VEGETABLES.length));
+const discoveredPct = computed(() => pct(discovered.value, PLANTS.length));
 
-/** A day row plus how many of its vegetables were first-evers. */
+/** A day row plus how many of its plants were first-evers. */
 const dayRows = computed(() =>
   loggedDays.value.map((day) => ({ day, news: firstsOn(day.key).length })),
 );
@@ -107,14 +107,14 @@ function toggleWeek(key: string): void {
         <div class="sum__meter">
           <div class="row sum__meterhead">
             <span class="grow dim">{{ t("history.tried") }}</span>
-            <span class="num">{{ discovered }} / {{ VEGETABLES.length }}</span>
+            <span class="num">{{ discovered }} / {{ PLANTS.length }}</span>
           </div>
           <span
             class="bar"
             role="progressbar"
             :aria-label="t('history.triedAria')"
             aria-valuemin="0"
-            :aria-valuemax="VEGETABLES.length"
+            :aria-valuemax="PLANTS.length"
             :aria-valuenow="discovered"
           >
             <span class="bar__fill" :style="{ width: `${discoveredPct}%` }" />
@@ -148,10 +148,10 @@ function toggleWeek(key: string): void {
                 {{ t("history.newCount", { n: row.news }) }}
               </span>
               <span class="strip">
-                <VegIcon
-                  v-for="veg in row.day.items.slice(0, STRIP_MAX)"
-                  :key="veg.id"
-                  :veg="veg"
+                <PlantIcon
+                  v-for="plant in row.day.items.slice(0, STRIP_MAX)"
+                  :key="plant.id"
+                  :plant="plant"
                   :size="26"
                 />
                 <span v-if="row.day.items.length > STRIP_MAX" class="chip strip__more num">
@@ -169,9 +169,9 @@ function toggleWeek(key: string): void {
             <div v-if="openDay === row.day.key" class="panel">
               <div class="divider" />
               <ul class="items">
-                <li v-for="veg in row.day.items" :key="veg.id" class="row items__row">
-                  <VegIcon :veg="veg" :size="34" />
-                  <span class="grow truncate">{{ vegName(veg) }}</span>
+                <li v-for="plant in row.day.items" :key="plant.id" class="row items__row">
+                  <PlantIcon :plant="plant" :size="34" />
+                  <span class="grow truncate">{{ plantName(plant) }}</span>
                 </li>
               </ul>
               <div class="panel__foot">
@@ -237,11 +237,11 @@ function toggleWeek(key: string): void {
               <ul class="items">
                 <li
                   v-for="item in row.week.items.slice(0, WEEK_ITEMS_MAX)"
-                  :key="item.veg.id"
+                  :key="item.plant.id"
                   class="row items__row"
                 >
-                  <VegIcon :veg="item.veg" :size="30" />
-                  <span class="grow truncate">{{ vegName(item.veg) }}</span>
+                  <PlantIcon :plant="item.plant" :size="30" />
+                  <span class="grow truncate">{{ plantName(item.plant) }}</span>
                   <span class="num dim">{{ item.days }}/7</span>
                 </li>
               </ul>

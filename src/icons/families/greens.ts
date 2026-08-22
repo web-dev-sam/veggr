@@ -3,7 +3,7 @@
  * fronds.
  *
  * This is the hardest part of the catalogue to draw distinctly — a third of all
- * vegetables live here and they are all green — so these families carry the most
+ * plants live here and they are all green — so these families carry the most
  * silhouettes.
  */
 

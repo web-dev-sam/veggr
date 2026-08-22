@@ -1,7 +1,7 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /** Roots, tubers and alliums — everything harvested from below the soil line. */
-export const ROOTS: Vegetable[] = [
+export const ROOTS: Plant[] = [
   {
     id: "arrowroot",
     name: "Arrowroot",

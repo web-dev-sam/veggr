@@ -11,12 +11,12 @@
  */
 
 import { computed, watch } from "vue";
-import type { VegCategory, Vegetable } from "../data/vegetable.ts";
+import type { PlantCategory, Plant } from "../data/plant.ts";
 import { settings } from "../stores/settings.ts";
 import { de } from "./de.ts";
 import { type MessageKey, en } from "./en.ts";
 import { type Locale, LOCALE_NAMES, LOCALES } from "./locale.ts";
-import { VEG_NAMES } from "./veg/index.ts";
+import { PLANT_NAMES } from "./plants/index.ts";
 
 export { LOCALE_NAMES, LOCALES, type Locale, type MessageKey };
 
@@ -111,23 +111,23 @@ export function tList(key: ListKey): readonly string[] {
   return parts;
 }
 
-export function categoryLabel(id: VegCategory): string {
+export function categoryLabel(id: PlantCategory): string {
   return t(`cat.${id}`);
 }
 
 /** The catalogue name in the active language, falling back to English. */
-export function vegName(veg: Vegetable): string {
-  return VEG_NAMES[settings.locale]?.[veg.id]?.name ?? veg.name;
+export function plantName(plant: Plant): string {
+  return PLANT_NAMES[settings.locale]?.[plant.id]?.name ?? plant.name;
 }
 
 /**
- * Everything a search should match for one vegetable: the translated name plus
+ * Everything a search should match for one plant: the translated name plus
  * *both* alias sets and the English name. A German user who learned the word
  * "kale" still means Grünkohl, so localising must never remove a search term.
  */
-export function vegSearchTerms(veg: Vegetable): string[] {
-  const translated = VEG_NAMES[settings.locale]?.[veg.id];
-  const terms = [veg.name, ...veg.aliases];
+export function plantSearchTerms(plant: Plant): string[] {
+  const translated = PLANT_NAMES[settings.locale]?.[plant.id];
+  const terms = [plant.name, ...plant.aliases];
   if (translated) terms.push(translated.name, ...(translated.aliases ?? []));
   return terms;
 }

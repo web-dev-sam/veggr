@@ -1,20 +1,20 @@
 <script setup lang="ts">
 /**
- * Renders a generated glyph. The spec is memoised per vegetable in the engine,
+ * Renders a generated glyph. The spec is memoised per plant in the engine,
  * so mounting hundreds of these in a catalogue grid costs one Map lookup each.
  */
 import { computed, useId } from "vue";
-import type { Vegetable } from "../data/vegetable.ts";
-import { vegName } from "../i18n/index.ts";
-import { vegIcon } from "../icons/glyph.ts";
+import type { Plant } from "../data/plant.ts";
+import { plantName } from "../i18n/index.ts";
+import { plantIcon } from "../icons/glyph.ts";
 
-const props = withDefaults(defineProps<{ veg: Vegetable; size?: number; selected?: boolean }>(), {
+const props = withDefaults(defineProps<{ plant: Plant; size?: number; selected?: boolean }>(), {
   size: 44,
   selected: false,
 });
 
-const spec = computed(() => vegIcon(props.veg));
-// Gradient and clip ids must be unique per instance, not per vegetable.
+const spec = computed(() => plantIcon(props.plant));
+// Gradient and clip ids must be unique per instance, not per plant.
 const uid = useId();
 </script>
 
@@ -25,7 +25,7 @@ const uid = useId();
     :height="props.size"
     viewBox="0 0 100 100"
     role="img"
-    :aria-label="vegName(props.veg)"
+    :aria-label="plantName(props.plant)"
   >
     <defs>
       <linearGradient

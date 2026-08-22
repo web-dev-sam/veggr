@@ -1,7 +1,7 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /** Culinary nuts: true tree nuts plus the drupes, legumes and seeds sold as nuts. */
-export const NUTS: Vegetable[] = [
+export const NUTS: Plant[] = [
   {
     id: "acorn",
     name: "Acorn",

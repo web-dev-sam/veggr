@@ -1,4 +1,4 @@
-import type { Vegetable } from "../vegetable.ts";
+import type { Plant } from "../plant.ts";
 
 /**
  * Dried spices, whole and ground, plus the classic multi-plant blends.
@@ -11,7 +11,7 @@ import type { Vegetable } from "../vegetable.ts";
  * ginger, turmeric, galangal, horseradish and wasabi would be the same plant
  * counted twice.
  */
-export const SPICES: Vegetable[] = [
+export const SPICES: Plant[] = [
   {
     id: "ajwain",
     name: "Ajwain",

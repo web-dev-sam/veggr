@@ -1,6 +1,6 @@
 /**
  * The two bits of shared wording. Everything the app displays is a count of
- * different vegetables, so this is all the formatting there is.
+ * different plants, so this is all the formatting there is.
  */
 
 import { t } from "../i18n/index.ts";

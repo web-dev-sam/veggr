@@ -1,14 +1,14 @@
 <script setup lang="ts">
 /**
  * The week is where variety lives. A day asks for a handful of different
- * vegetables; a week asks for thirty, so this screen makes the target
+ * plants; a week asks for thirty, so this screen makes the target
  * physical: thirty slots, and you can see the empty ones.
  */
 import { computed, ref } from "vue";
 import ProgressRing from "../components/ProgressRing.vue";
 import UiIcon from "../components/UiIcon.vue";
-import VegIcon from "../components/VegIcon.vue";
-import { t, vegName } from "../i18n/index.ts";
+import PlantIcon from "../components/PlantIcon.vue";
+import { t, plantName } from "../i18n/index.ts";
 import { currentDay } from "../lib/clock.ts";
 import {
   addDays,
@@ -57,15 +57,15 @@ const scale = computed(() =>
 /** Empty slots are the point: they are the ones still to fill. */
 const slots = computed(() => {
   const goal = Math.max(settings.weeklyVariety, week.value.variety);
-  return Array.from({ length: goal }, (_, i) => week.value.items[i]?.veg ?? null);
+  return Array.from({ length: goal }, (_, i) => week.value.items[i]?.plant ?? null);
 });
 
-/** Vegetables tried for the very first time inside this week. */
+/** Plants tried for the very first time inside this week. */
 const firsts = computed(() => {
   const from = week.value.start;
   const to = addDays(from, 7).getTime();
   return week.value.items.filter((item) => {
-    const at = firstLogged.value.get(item.veg.id);
+    const at = firstLogged.value.get(item.plant.id);
     return at !== undefined && at >= from && at < to;
   });
 });
@@ -138,8 +138,8 @@ const selectedDay = computed(
         }}</span>
       </div>
       <div class="card slots">
-        <template v-for="(veg, i) in slots" :key="i">
-          <VegIcon v-if="veg" :veg="veg" :size="34" />
+        <template v-for="(plant, i) in slots" :key="i">
+          <PlantIcon v-if="plant" :plant="plant" :size="34" />
           <span v-else class="slot" />
         </template>
       </div>
@@ -190,9 +190,9 @@ const selectedDay = computed(
             <span class="faint num">{{ kinds(selectedDay.variety) }}</span>
           </div>
           <div v-if="selectedDay.items.length" class="stack rows">
-            <div v-for="veg in selectedDay.items" :key="veg.id" class="row">
-              <VegIcon :veg="veg" :size="30" />
-              <span class="grow truncate">{{ vegName(veg) }}</span>
+            <div v-for="plant in selectedDay.items" :key="plant.id" class="row">
+              <PlantIcon :plant="plant" :size="30" />
+              <span class="grow truncate">{{ plantName(plant) }}</span>
             </div>
           </div>
           <p v-else class="faint">{{ t("week.nothingLogged") }}</p>
@@ -209,9 +209,9 @@ const selectedDay = computed(
         <h2>{{ t("week.firstTime") }}</h2>
       </div>
       <div class="scroller">
-        <div v-for="item in firsts" :key="item.veg.id" class="new">
-          <VegIcon :veg="item.veg" :size="46" />
-          <span class="truncate">{{ vegName(item.veg) }}</span>
+        <div v-for="item in firsts" :key="item.plant.id" class="new">
+          <PlantIcon :plant="item.plant" :size="46" />
+          <span class="truncate">{{ plantName(item.plant) }}</span>
         </div>
       </div>
     </section>
@@ -222,11 +222,11 @@ const selectedDay = computed(
         <span class="faint num">{{ t("common.kinds", { n: week.variety }) }}</span>
       </div>
       <div class="card stack">
-        <div v-for="item in week.items.slice(0, 12)" :key="item.veg.id" class="top">
-          <VegIcon :veg="item.veg" :size="32" />
+        <div v-for="item in week.items.slice(0, 12)" :key="item.plant.id" class="top">
+          <PlantIcon :plant="item.plant" :size="32" />
           <div class="grow">
             <div class="row tight">
-              <span class="grow truncate">{{ vegName(item.veg) }}</span>
+              <span class="grow truncate">{{ plantName(item.plant) }}</span>
               <span class="faint num">{{ item.days }}/7</span>
             </div>
             <div class="bar">
