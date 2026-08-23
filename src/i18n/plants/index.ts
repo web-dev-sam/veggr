@@ -18,6 +18,7 @@ import { SEEDS_DE } from "./seeds.de.ts";
 import { SPICES_DE } from "./spices.de.ts";
 import { STEMS_DE } from "./stems.de.ts";
 import { SWEETENERS_DE } from "./sweeteners.de.ts";
+import { TEAS_DE } from "./teas.de.ts";
 import { TROPICAL_DE } from "./tropical.de.ts";
 
 const DE: PlantLocale = {
@@ -31,6 +32,7 @@ const DE: PlantLocale = {
   ...GRAINS_DE,
   ...SPICES_DE,
   ...SWEETENERS_DE,
+  ...TEAS_DE,
   ...ORCHARD_DE,
   ...TROPICAL_DE,
 };

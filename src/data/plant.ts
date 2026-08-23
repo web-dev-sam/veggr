@@ -38,6 +38,9 @@ export const CATEGORY_IDS = [
   // Syrups and nectars: the shelf next to the spice rack, and the only class
   // whose entries are a plant reduced to a jar rather than the plant itself.
   "sweet",
+  // Leaves and flowers that only ever arrive as an infusion. Last, because a
+  // cup is the one entry that is never on the plate.
+  "tea",
 ] as const;
 
 export type PlantCategory = (typeof CATEGORY_IDS)[number];

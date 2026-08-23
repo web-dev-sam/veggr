@@ -66,7 +66,10 @@ export const HERBS_DE: PlantLocale = {
     aliases: ["limettenblätter", "makrut", "bai makrut", "kaffir lime leaf"],
   },
   kombu: { name: "Kombu", aliases: ["kombu-alge", "seetang", "kelp", "riementang"] },
-  lemongrass: { name: "Zitronengras", aliases: ["lemongrass", "sereh", "citronella", "takrai"] },
+  lemongrass: {
+    name: "Zitronengras",
+    aliases: ["lemongrass", "sereh", "citronella", "takrai", "zitronengrastee"],
+  },
   "lentil-sprouts": {
     name: "Linsensprossen",
     aliases: ["gekeimte linsen", "linsenkeimlinge", "lentil sprouts"],
@@ -74,7 +77,19 @@ export const HERBS_DE: PlantLocale = {
   lovage: { name: "Liebstöckel", aliases: ["maggikraut", "maggiekraut", "luststock", "lovage"] },
   marjoram: { name: "Majoran", aliases: ["wurstkraut", "meiran", "marjoram", "majoram"] },
   microgreens: { name: "Microgreens", aliases: ["mikrogrün", "mikroblätter", "micro greens"] },
-  mint: { name: "Minze", aliases: ["pfefferminze", "grüne minze", "krauseminze", "mint"] },
+  mint: {
+    name: "Minze",
+    aliases: [
+      "pfefferminze",
+      "pfefferminztee",
+      "nanaminze",
+      "nanatee",
+      "marokkanische minze",
+      "grüne minze",
+      "krauseminze",
+      "mint",
+    ],
+  },
   "mung-bean-sprouts": {
     name: "Mungobohnensprossen",
     aliases: ["sojasprossen", "bohnensprossen", "mungosprossen", "bean sprouts"],
@@ -103,7 +118,7 @@ export const HERBS_DE: PlantLocale = {
     aliases: ["rau ram", "vietnamesische minze", "laksablatt", "polygonum"],
   },
   rosemary: { name: "Rosmarin", aliases: ["rosemary", "rosmarinus"] },
-  sage: { name: "Salbei", aliases: ["echter salbei", "gartensalbei", "sage"] },
+  sage: { name: "Salbei", aliases: ["echter salbei", "gartensalbei", "salbeitee", "sage"] },
   "salad-burnet": {
     name: "Pimpinelle",
     aliases: ["kleiner wiesenknopf", "pimpernelle", "herrgottsbart", "salad burnet"],

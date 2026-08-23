@@ -67,7 +67,7 @@ export const ROOTS_DE: PlantLocale = {
     name: "Knoblauchstiele",
     aliases: ["knoblauchknospen", "knoblauchgrün", "knoblauchsprossen", "garlic scapes"],
   },
-  ginger: { name: "Ingwer", aliases: ["ingwerwurzel"] },
+  ginger: { name: "Ingwer", aliases: ["ingwerwurzel", "ingwertee"] },
   "golden-beetroot": {
     name: "Gelbe Bete",
     aliases: ["goldene bete", "gelbe randen", "golden beet"],

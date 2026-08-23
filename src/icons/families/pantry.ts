@@ -1,14 +1,14 @@
 /**
- * Silhouettes for the dry store and the sweet shelf: nuts, seeds, grains,
- * spices, syrups.
+ * Silhouettes for the dry store, the sweet shelf and the tea caddy: nuts,
+ * seeds, grains, spices, syrups and leaves for brewing.
  *
  * These categories fight the produce families' assumption that an item has a
  * distinctive outline. A peppercorn, a juniper berry and an allspice corn are
  * all "a dark sphere", a wheat berry and a rye berry are the same tan ovoid,
  * eighteen ground powders are all "a heap", and a syrup has no shape at all
  * until something holds it. So the silhouettes here key off how the thing is
- * *presented* — whole, split, scattered, piled, rolled, ground, poured —
- * rather than off its botany.
+ * *presented* — whole, split, scattered, piled, rolled, ground, poured, steeped
+ * — rather than off its botany.
  */
 
 import { DEG, TAU, type Draw, type Shape } from "../spec.ts";
@@ -1037,3 +1037,183 @@ const dipper: Draw = (d, p) => {
 };
 
 export const SWEET: readonly Draw[] = [pour, pot, comb, loaf, dipper];
+
+/* -------------------------------------------------------------------- tea */
+
+/**
+ * Long leaves rolled and dried into twists — tea itself, cut mate, guayusa.
+ *
+ * They lie side by side and bow the same way, like a spoonful tipped onto a
+ * table. Fanned from a shared centre instead, three capsules are an asterisk,
+ * and the curled end that says "rolled" gets lost in the crossing.
+ */
+const twist: Draw = (d, p) => {
+  const count = d.i(3, 4);
+  const angle = (d.f(-24, 24) - 90) * DEG;
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  const gap = d.f(13, 16);
+  const bow = d.f(11, 16);
+  const shapes: Shape[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const shift = (i - (count - 1) / 2) * gap;
+    const cx = 50 - dy * shift;
+    const cy = 50 + dx * shift;
+    const half = d.f(23, 29) * (i % 2 === 0 ? 1 : 0.86);
+    const arch = bow * d.f(0.75, 1.15);
+    const tipX = cx + dx * half;
+    const tipY = cy + dy * half;
+
+    shapes.push({
+      d: curve(cx - dx * half, cy - dy * half, cx - dy * arch, cy + dx * arch, tipX, tipY),
+      stroke: i % 2 === 0 ? p.ink : p.inkDeep,
+      width: d.f(7.5, 10),
+    });
+    // The curl sits on the twist, not past it: a spiral hanging off the tip
+    // reads as a tendril rather than as the end of something rolled.
+    shapes.push({
+      d: spiral(tipX - dx * 3, tipY - dy * 3, 1.2, d.f(5.5, 7), d.f(1, 1.4), angle).path,
+      stroke: p.spark,
+      width: 2,
+      opacity: 0.75,
+    });
+  }
+  return shapes;
+};
+
+/**
+ * A dried flower head on its stalk — chamomile, linden, mallow, elderflower.
+ * Same hub-and-rays construction as `star`, told apart by the count: a dozen
+ * narrow petals and a stalk read as a blossom, six broad points as a spice.
+ */
+const bloom: Draw = (d, p) => {
+  const cy = d.f(42, 48);
+  const petals = d.i(10, 14);
+  const spin = d.f(0, 360);
+  const hub = d.f(8, 11);
+  const reach = d.f(17, 22);
+  const rootX = 50 + d.f(-7, 7);
+
+  // Stalk first, so the head covers the join and the stalk can start inside it.
+  const shapes: Shape[] = [
+    {
+      d: curve(rootX, d.f(88, 94), rootX + d.f(-9, 9), cy + reach, 50, cy),
+      stroke: p.inkDeep,
+      width: d.f(3, 4.2),
+    },
+  ];
+
+  for (let i = 0; i < petals; i++) {
+    shapes.push({
+      d: leaf(50, cy, spin + (i / petals) * 360, hub + reach * d.f(0.82, 1.12), d.f(4, 5.6)),
+      fill: i % 2 === 0 ? p.ink : p.inkDeep,
+    });
+  }
+
+  shapes.push({ d: disc(50, cy, hub), fill: p.inkDeep });
+  shapes.push({ d: disc(50, cy, hub * d.f(0.5, 0.66)), fill: p.spark, opacity: 0.75 });
+  return shapes;
+};
+
+/**
+ * A tangle of cut leaf — rooibos and honeybush needles, anything that leaves
+ * the caddy as a spoonful of shreds.
+ *
+ * Deliberately not `pile`'s tidy rows: these are long, thin and crossing, so a
+ * dozen of them read as one mass of loose leaf where stacked ones would read
+ * as seeds again.
+ */
+const strands: Draw = (d, p) => {
+  const count = d.i(9, 12);
+  const lie = d.f(0, 180);
+  const dx = Math.cos(lie * DEG);
+  const dy = Math.sin(lie * DEG);
+  const shapes: Shape[] = [];
+
+  for (let i = 0; i < count; i++) {
+    // Scattered around the centre and the shreds average into a rosette, which
+    // is a flower. Spread them across their own lie instead and the same dozen
+    // needles read as a pinch of loose leaf.
+    const across = d.f(-17, 17);
+    const along = d.f(-9, 9);
+    shapes.push({
+      d: lens(
+        50 - dy * across + dx * along,
+        50 + dx * across + dy * along,
+        lie + d.f(-22, 22),
+        d.f(30, 44),
+        d.f(2.3, 3.4),
+      ),
+      fill: i % 3 === 0 ? p.inkDeep : p.ink,
+    });
+  }
+
+  // Two brighter shreds on top: without them the tangle is one flat silhouette.
+  for (let i = 0; i < 2; i++) {
+    shapes.push({
+      d: lens(50 + d.f(-10, 10), 50 + d.f(-10, 10), lie + d.f(-30, 30), d.f(26, 36), d.f(2, 2.8)),
+      fill: p.spark,
+      opacity: 0.8,
+    });
+  }
+  return shapes;
+};
+
+/** The bowl all of it ends up in, steaming, one leaf still afloat. */
+const steep: Draw = (d, p) => {
+  const rimY = d.f(54, 58);
+  const rx = d.f(25, 29);
+  const depth = d.f(22, 26);
+
+  const shapes: Shape[] = [
+    { d: cup(50, rimY, rx, depth), fill: p.ink },
+    // Leaf before rim: the rim bar lands on its root and the leaf comes out of
+    // the liquid rather than standing on it.
+    {
+      d: leaf(50 + d.f(-10, 10), rimY, -90 + d.f(-30, 30), d.f(16, 22), d.f(5, 7)),
+      fill: p.inkDeep,
+    },
+    { d: bar(50 - rx, rimY, 50 + rx, rimY), stroke: p.inkDeep, width: d.f(5, 6.5) },
+    {
+      d: arc(50, rimY + depth * 0.34, rx * 0.52, depth * 0.3, 20, 160),
+      stroke: p.spark,
+      width: 2.4,
+      opacity: 0.5,
+    },
+  ];
+
+  const lean = d.f(-8, 8);
+  for (const side of [-1, 1]) {
+    const x = 50 + side * d.f(7, 12);
+    // The two threads rise to different heights: matched ones read as handles.
+    const top = rimY - d.f(24, 34) + (side === 1 ? d.f(4, 9) : 0);
+    shapes.push({
+      d: curve(x, rimY - d.f(6, 9), x + side * d.f(8, 13) + lean, (rimY + top) / 2, x + lean, top),
+      stroke: p.spark,
+      width: d.f(2.4, 3.2),
+      opacity: 0.6,
+    });
+  }
+
+  return shapes;
+};
+
+export const TEA: readonly Draw[] = [twist, bloom, strands, steep];
+
+/**
+ * Part of this shelf carries its presentation in its name: a blossom is sold as
+ * whole dried flower heads and nothing else, so the pool narrows to the two
+ * forms that stay true to that — the head itself, or the head in a cup.
+ * Chamomile is spelled out because it is the one whose name omits the flower.
+ *
+ * `bloom` is listed twice to weight it. An even pool put four of the five
+ * flowers in a cup, and a shelf of cups is the thing the families exist to
+ * avoid; a pool of only heads swaps that for four near-identical yellow
+ * daisies, which is the same failure wearing petals.
+ */
+export function teaForms(name: string): readonly Draw[] | null {
+  const n = name.toLowerCase();
+  const flowering = n.includes("blossom") || n.includes("flower") || n === "chamomile";
+  return flowering ? [bloom, bloom, steep] : null;
+}

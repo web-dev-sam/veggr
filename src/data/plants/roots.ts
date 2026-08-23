@@ -120,7 +120,7 @@ export const ROOTS: Plant[] = [
     name: "Ginger",
     category: "root",
     hue: 38,
-    aliases: ["root ginger", "fresh ginger"],
+    aliases: ["root ginger", "fresh ginger", "ginger tea"],
   },
   {
     id: "golden-beetroot",

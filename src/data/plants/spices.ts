@@ -234,7 +234,7 @@ export const SPICES: Plant[] = [
     name: "Dried Hibiscus",
     category: "spice",
     hue: 345,
-    aliases: ["hibiscus flowers", "roselle", "flor de jamaica"],
+    aliases: ["hibiscus flowers", "hibiscus tea", "roselle", "flor de jamaica"],
   },
   {
     id: "dried-lime",
@@ -269,7 +269,7 @@ export const SPICES: Plant[] = [
     name: "Fennel Seed",
     category: "spice",
     hue: 68,
-    aliases: ["fennel seeds", "saunf", "sweet fennel seed"],
+    aliases: ["fennel seeds", "fennel tea", "saunf", "sweet fennel seed"],
   },
   {
     id: "fenugreek",
@@ -360,7 +360,7 @@ export const SPICES: Plant[] = [
     name: "Licorice Root",
     category: "spice",
     hue: 43,
-    aliases: ["liquorice root", "licorice", "mulethi"],
+    aliases: ["liquorice root", "licorice", "licorice tea", "mulethi"],
   },
   {
     id: "long-pepper",

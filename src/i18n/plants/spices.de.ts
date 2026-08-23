@@ -86,7 +86,7 @@ export const SPICES_DE: PlantLocale = {
   "dill-seed": { name: "Dillsaat", aliases: ["dillsamen", "dillkörner", "dill seed"] },
   "dried-hibiscus": {
     name: "Hibiskusblüten",
-    aliases: ["getrockneter hibiskus", "karkade", "malvenblüten"],
+    aliases: ["getrockneter hibiskus", "hibiskustee", "karkade", "malvenblüten"],
   },
   "dried-lime": {
     name: "Getrocknete Limette",
@@ -101,7 +101,10 @@ export const SPICES_DE: PlantLocale = {
     aliases: ["rosenblüten", "rosenblätter", "gulab"],
   },
   dukkah: { name: "Dukkah", aliases: ["duqqa", "ägyptische nuss-gewürzmischung"] },
-  "fennel-seed": { name: "Fenchelsamen", aliases: ["fenchelsaat", "fenchelkörner", "saunf"] },
+  "fennel-seed": {
+    name: "Fenchelsamen",
+    aliases: ["fenchelsaat", "fenchelkörner", "fencheltee", "saunf"],
+  },
   fenugreek: {
     name: "Bockshornklee",
     aliases: ["bockshornkleesamen", "methi", "fenugreek"],
@@ -152,7 +155,7 @@ export const SPICES_DE: PlantLocale = {
   },
   "licorice-root": {
     name: "Süßholzwurzel",
-    aliases: ["lakritzwurzel", "süßholz", "licorice"],
+    aliases: ["lakritzwurzel", "süßholz", "süßholztee", "licorice"],
   },
   "long-pepper": {
     name: "Langer Pfeffer",

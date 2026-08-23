@@ -176,7 +176,7 @@ export const HERBS: Plant[] = [
     name: "Lemongrass",
     category: "herb",
     hue: 88,
-    aliases: ["citronella grass", "sereh", "takrai"],
+    aliases: ["citronella grass", "sereh", "takrai", "lemongrass tea"],
   },
   {
     id: "lentil-sprouts",
@@ -211,7 +211,7 @@ export const HERBS: Plant[] = [
     name: "Mint",
     category: "herb",
     hue: 122,
-    aliases: ["spearmint", "peppermint", "pudina"],
+    aliases: ["spearmint", "peppermint", "nana", "moroccan mint", "mint tea", "pudina"],
   },
   {
     id: "mung-bean-sprouts",
@@ -288,7 +288,7 @@ export const HERBS: Plant[] = [
     name: "Sage",
     category: "herb",
     hue: 98,
-    aliases: ["common sage", "garden sage"],
+    aliases: ["common sage", "garden sage", "sage tea"],
   },
   {
     id: "salad-burnet",

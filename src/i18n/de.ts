@@ -179,4 +179,5 @@ export const de = {
   "cat.grain": "Getreide",
   "cat.spice": "Gewürze",
   "cat.sweet": "Süßes",
+  "cat.tea": "Tee",
 } as const satisfies Record<MessageKey, string>;

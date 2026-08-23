@@ -420,7 +420,7 @@ export const GREENS: Plant[] = [
     name: "Stinging Nettle",
     category: "leafy",
     hue: 128,
-    aliases: ["nettle", "nettle tops", "ortie"],
+    aliases: ["nettle", "nettle tops", "nettle tea", "ortie"],
   },
   {
     id: "sweet-potato-leaves",

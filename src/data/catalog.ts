@@ -22,6 +22,7 @@ import { SEEDS } from "./plants/seeds.ts";
 import { SPICES } from "./plants/spices.ts";
 import { STEMS } from "./plants/stems.ts";
 import { SWEETENERS } from "./plants/sweeteners.ts";
+import { TEAS } from "./plants/teas.ts";
 import { TROPICAL } from "./plants/tropical.ts";
 
 /** Canonical order, by English name — a stable identity for the whole set. */
@@ -36,6 +37,7 @@ export const PLANTS: readonly Plant[] = [
   ...GRAINS,
   ...SPICES,
   ...SWEETENERS,
+  ...TEAS,
   ...ORCHARD,
   ...TROPICAL,
 ].sort((a, b) => a.name.localeCompare(b.name));
@@ -69,13 +71,19 @@ function byName(): Plant[] {
  * without them does, and it has to run *before* the diacritic strip: let "ö"
  * collapse to "o" first and "moehre" stops matching Möhre. Stripping afterwards
  * is what lets "chicoree" find Chicorée and "jalapeno" find Jalapeño.
+ *
+ * Spaces and hyphens go last, and they go entirely. German compounds are
+ * written all three ways — Nana-Tee, Nanatee, "nana tee" — and none of them is
+ * wrong, so the separator cannot be part of the key. Dropping it on both sides
+ * of the comparison also earns "kohl rabi" and "green tea" for free.
  */
 function fold(text: string, expand: boolean): string {
   const lower = text.toLowerCase();
   return (expand ? lower.replaceAll("ä", "ae").replaceAll("ö", "oe").replaceAll("ü", "ue") : lower)
     .replaceAll("ß", "ss")
     .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "");
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/[\s-]+/g, "");
 }
 
 /**

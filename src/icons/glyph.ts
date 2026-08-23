@@ -26,7 +26,7 @@ import { BRASSICA, HERB, LEAFY, SEA, SPROUT } from "./families/greens.ts";
 import { FRUITING, LEGUME, SQUASH } from "./families/fruits.ts";
 import { FRUIT, fruitForms } from "./families/fruit.ts";
 import { ALLIUM, MUSHROOM, ROOT, STEM, TUBER } from "./families/roots.ts";
-import { GRAIN, NUT, SEED, SPICE, SWEET } from "./families/pantry.ts";
+import { GRAIN, NUT, SEED, SPICE, SWEET, TEA, teaForms } from "./families/pantry.ts";
 import { roundRect } from "./shapes.ts";
 import type { Draw, Shape } from "./spec.ts";
 
@@ -52,6 +52,7 @@ const FAMILIES: Record<PlantCategory, readonly Draw[]> = {
   grain: GRAIN,
   spice: SPICE,
   sweet: SWEET,
+  tea: TEA,
 };
 
 /** Per-corner radii, clockwise from top-left, in the icon's 100-unit box. */
@@ -149,8 +150,16 @@ export function plantIcon(plant: Plant): IconSpec {
   const family = FAMILIES[plant.category];
   // Fruit is the one family whose silhouettes portray a specific fruit instead
   // of an abstract form, so a recognisable name narrows the pool before the
-  // hash picks from it. The three `d.i` draws stay in place, so nothing else moves.
-  const pool = (plant.category === "fruit" ? fruitForms(plant.name) : null) ?? family;
+  // hash picks from it. Tea does the same for the flower heads on its shelf,
+  // which are sold whole and as nothing else. The three `d.i` draws stay in
+  // place, so nothing else moves.
+  const named =
+    plant.category === "fruit"
+      ? fruitForms(plant.name)
+      : plant.category === "tea"
+        ? teaForms(plant.name)
+        : null;
+  const pool = named ?? family;
   const tilt = d.f(-9, 9);
   const scale = d.f(0.92, 1.06);
 

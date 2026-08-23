@@ -240,7 +240,7 @@ export const GREENS_DE: PlantLocale = {
   },
   "stinging-nettle": {
     name: "Brennnessel",
-    aliases: ["brennessel", "brennnesselblätter", "nesselblätter", "nettle"],
+    aliases: ["brennessel", "brennnesseltee", "brennnesselblätter", "nesselblätter", "nettle"],
   },
   "sweet-potato-leaves": {
     name: "Süßkartoffelblätter",

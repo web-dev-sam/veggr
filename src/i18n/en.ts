@@ -182,6 +182,7 @@ export const en = {
   "cat.grain": "Grain",
   "cat.spice": "Spice",
   "cat.sweet": "Sweet",
+  "cat.tea": "Tea",
 } as const;
 
 export type MessageKey = keyof typeof en;
