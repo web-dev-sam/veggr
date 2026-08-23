@@ -12,6 +12,7 @@
 import { type Locale, locale, plantName, plantSearchTerms } from "../i18n/index.ts";
 import type { Plant } from "./plant.ts";
 import { FRUITING } from "./plants/fruiting.ts";
+import { GRAINS } from "./plants/grains.ts";
 import { GREENS } from "./plants/greens.ts";
 import { HERBS } from "./plants/herbs.ts";
 import { NUTS } from "./plants/nuts.ts";
@@ -32,6 +33,7 @@ export const PLANTS: readonly Plant[] = [
   ...STEMS,
   ...NUTS,
   ...SEEDS,
+  ...GRAINS,
   ...SPICES,
   ...SWEETENERS,
   ...ORCHARD,

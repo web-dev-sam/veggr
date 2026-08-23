@@ -26,7 +26,7 @@ import { BRASSICA, HERB, LEAFY, SEA, SPROUT } from "./families/greens.ts";
 import { FRUITING, LEGUME, SQUASH } from "./families/fruits.ts";
 import { FRUIT, fruitForms } from "./families/fruit.ts";
 import { ALLIUM, MUSHROOM, ROOT, STEM, TUBER } from "./families/roots.ts";
-import { NUT, SEED, SPICE, SWEET } from "./families/pantry.ts";
+import { GRAIN, NUT, SEED, SPICE, SWEET } from "./families/pantry.ts";
 import { roundRect } from "./shapes.ts";
 import type { Draw, Shape } from "./spec.ts";
 
@@ -49,6 +49,7 @@ const FAMILIES: Record<PlantCategory, readonly Draw[]> = {
   mushroom: MUSHROOM,
   nut: NUT,
   seed: SEED,
+  grain: GRAIN,
   spice: SPICE,
   sweet: SWEET,
 };

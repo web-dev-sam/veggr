@@ -1,13 +1,14 @@
 /**
- * Silhouettes for the dry store and the sweet shelf: nuts, seeds, spices,
- * syrups.
+ * Silhouettes for the dry store and the sweet shelf: nuts, seeds, grains,
+ * spices, syrups.
  *
  * These categories fight the produce families' assumption that an item has a
  * distinctive outline. A peppercorn, a juniper berry and an allspice corn are
- * all "a dark sphere", eighteen ground powders are all "a heap", and a syrup
- * has no shape at all until something holds it. So the silhouettes here key
- * off how the thing is *presented* — whole, split, scattered, piled, rolled,
- * ground, poured — rather than off its botany.
+ * all "a dark sphere", a wheat berry and a rye berry are the same tan ovoid,
+ * eighteen ground powders are all "a heap", and a syrup has no shape at all
+ * until something holds it. So the silhouettes here key off how the thing is
+ * *presented* — whole, split, scattered, piled, rolled, ground, poured —
+ * rather than off its botany.
  */
 
 import { DEG, TAU, type Draw, type Shape } from "../spec.ts";
@@ -22,6 +23,7 @@ import {
   leaf,
   lens,
   num,
+  onQuad,
   spiral,
   wave,
 } from "../shapes.ts";
@@ -355,6 +357,289 @@ const seedHead: Draw = (d, p) => {
 };
 
 export const SEED: readonly Draw[] = [scatter, striped, pile, seedHead];
+
+/* ------------------------------------------------------------------ grain */
+
+/**
+ * Grains seated in staggered pairs up a rachis, awns off the crown — wheat,
+ * rye, barley, einkorn, spelt. The bare cane under the spike is what keeps it
+ * off the herb family's stem-with-things-along-it silhouettes.
+ */
+const ear: Draw = (d, p) => {
+  const lean = d.f(-8, 8);
+  const baseY = d.f(79, 83);
+  const topY = d.f(38, 42);
+  const ctrlX = 50 + lean * 0.7;
+  const ctrlY = (baseY + topY) / 2;
+  const tipX = 50 + lean;
+  const rows = d.i(4, 5);
+  const splay = d.f(32, 44);
+  const reach = d.f(15, 18);
+
+  const shapes: Shape[] = [
+    { d: curve(50, baseY, ctrlX, ctrlY, tipX, topY), stroke: p.inkDeep, width: d.f(3.2, 4.2) },
+  ];
+
+  for (let i = 0; i < rows; i++) {
+    const t = 0.4 + (i / rows) * 0.54;
+    const len = reach * (1 - 0.2 * (i / rows));
+    for (const side of [-1, 1]) {
+      // A quarter row of stagger between the ranks. Seat each pair level and
+      // the spike fuses into one fat lozenge.
+      const at = onQuad(50, baseY, ctrlX, ctrlY, tipX, topY, t + (side < 0 ? 0 : 0.25 / rows));
+      shapes.push({
+        d: leaf(at.x, at.y, at.angle + side * splay, len, len * d.f(0.36, 0.44)),
+        fill: side < 0 ? p.ink : p.inkDeep,
+      });
+    }
+  }
+
+  // Awns run well past the topmost grain, which is the whole reason a spike
+  // reads as cereal and not as a bud.
+  const awns = d.i(3, 4);
+  for (let i = 0; i < awns; i++) {
+    const a = (-90 + lean * 0.4 + ((i + 0.5) / awns - 0.5) * d.f(42, 58)) * DEG;
+    const len = d.f(15, 19);
+    shapes.push({
+      d: bar(tipX, topY, tipX + Math.cos(a) * len, topY + Math.sin(a) * len),
+      stroke: p.spark,
+      width: d.f(1.8, 2.4),
+      opacity: 0.85,
+    });
+  }
+  shapes.push({
+    d: leaf(tipX, topY + d.f(1, 4), -90 + lean * 0.3, reach * 0.85, reach * 0.26),
+    fill: p.ink,
+  });
+  return shapes;
+};
+
+/** Rolled flakes overlapping, one stood on its edge — rolled oats, spelt, barley flakes. */
+const flakes: Draw = (d, p) => {
+  const seats = [
+    { x: 50 - d.f(13, 16), y: d.f(58, 62), r: d.f(14, 16) },
+    { x: 50 + d.f(12, 15), y: d.f(53, 57), r: d.f(13, 15) },
+    { x: 50 + d.f(-6, 2), y: d.f(42, 46), r: d.f(13, 15) },
+  ];
+  const shapes: Shape[] = [];
+
+  for (let i = 0; i < seats.length; i++) {
+    const s = seats[i]!;
+    const ry = s.r * d.f(0.46, 0.58);
+    shapes.push({
+      d: blob(s.x, s.y, s.r, ry, d.i(7, 9), d.f(0.05, 0.1), d),
+      fill: i % 2 === 0 ? p.ink : p.inkDeep,
+    });
+    // Rim on the near edge of every flake. Three flat blobs in two tones fuse
+    // into one lump; the rims are what let the stack come apart again.
+    shapes.push({
+      d: arc(s.x, s.y, s.r * 0.94, ry * 0.94, d.f(6, 22), d.f(158, 174)),
+      stroke: p.plateTo,
+      width: 2.2,
+      opacity: 0.6,
+    });
+  }
+
+  // The roller crimp, on the top flake only — the one place it is not half
+  // hidden. Without it a flake is a flat pebble.
+  const top = seats[2]!;
+  const crimp = top.r * 0.6;
+  shapes.push({
+    d: wave(top.x - crimp, top.x + crimp, top.y, d.f(1.2, 2), d.f(1, 1.5), d.f(0, TAU)),
+    stroke: p.plateTo,
+    width: 2.2,
+    opacity: 0.55,
+  });
+
+  // One flake up on its edge: the stack from above could be any flat bean, and
+  // the rolled edge is the only place a flake shows how thin it is.
+  const tilt = d.f(-16, 16);
+  const half = d.f(11, 14);
+  const edx = Math.cos(tilt * DEG);
+  const edy = Math.sin(tilt * DEG);
+  const ex = 50 + d.f(-9, 3);
+  const ey = d.f(66, 70);
+  shapes.push({
+    d: bar(ex - edx * half, ey - edy * half, ex + edx * half, ey + edy * half),
+    stroke: p.ink,
+    width: d.f(5, 6.5),
+  });
+  shapes.push({
+    d: bar(
+      ex - edx * half * 0.66,
+      ey - edy * half * 0.66,
+      ex + edx * half * 0.66,
+      ey + edy * half * 0.66,
+    ),
+    stroke: p.plateTo,
+    width: 2,
+    opacity: 0.5,
+  });
+  return shapes;
+};
+
+/**
+ * Whole kernels, creased down the length with the germ showing at the blunt
+ * end — wheat berries, rice, spelt, farro. The one grain silhouette with no
+ * stalk anywhere in it.
+ */
+const berries: Draw = (d, p) => {
+  const count = d.i(2, 3);
+  // Fewer kernels, fatter kernels: the plate carries its weight either way.
+  const rx = count === 2 ? d.f(10.5, 12) : d.f(9, 10.5);
+  const gap = rx * d.f(1.4, 1.6);
+  const shapes: Shape[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const t = (i / (count - 1)) * 2 - 1;
+    const cx = 50 + t * gap;
+    const cy = 50 + (i % 2 === 0 ? 1 : -1) * d.f(3, 6);
+    const up = rx * d.f(1.5, 1.75);
+    const down = rx * d.f(1.15, 1.35);
+    shapes.push({ d: egg(cx, cy, rx, up, down), fill: i % 2 === 0 ? p.ink : p.inkDeep });
+    // The crease carries the read: bare ovoids are nuts, not grain.
+    shapes.push({
+      d: curve(
+        cx + d.f(-1.5, 1.5),
+        cy - up * 0.74,
+        cx + d.f(-4, 4),
+        cy,
+        cx + d.f(-1.5, 1.5),
+        cy + down * 0.7,
+      ),
+      stroke: p.plateTo,
+      width: 2.6,
+      opacity: 0.65,
+    });
+    // Germ at the blunt end, and a disc rather than a dome: a dome pokes out
+    // through the ovoid and leaves the kernel on a pale plinth.
+    shapes.push({
+      d: disc(cx + d.f(-1, 1), cy + down * 0.56, rx * d.f(0.3, 0.38)),
+      fill: p.spark,
+      opacity: 0.7,
+    });
+  }
+  return shapes;
+};
+
+/** Grains hanging off drooping side branches — millet, sorghum, oats, teff. */
+const panicle: Draw = (d, p) => {
+  const lean = d.f(-6, 6);
+  const baseY = d.f(74, 78);
+  const topY = d.f(32, 36);
+  const ctrlX = 50 + lean * 0.8;
+  const ctrlY = (baseY + topY) / 2;
+  const tipX = 50 + lean;
+  const tiers = d.i(3, 4);
+  const shapes: Shape[] = [
+    { d: curve(50, baseY, ctrlX, ctrlY, tipX, topY), stroke: p.inkDeep, width: d.f(3, 4) },
+  ];
+
+  for (let i = 0; i < tiers; i++) {
+    const t = 0.46 + (i / (tiers - 1)) * 0.46;
+    // Longest branches lowest: an even fan bristles, a tapered one droops.
+    const reach = d.f(13, 18) * (1 - 0.3 * (i / tiers));
+    for (const side of [-1, 1]) {
+      // Each side gets its own node and its own drop, a sliver of a tier apart.
+      // Mirror the pair exactly and the whole thing turns into a fir tree.
+      const seat = onQuad(50, baseY, ctrlX, ctrlY, tipX, topY, t + (side < 0 ? 0 : 0.18 / tiers));
+      const drop = reach * d.f(0.7, 0.98);
+      const endX = seat.x + side * reach;
+      const endY = seat.y + drop;
+      // Control just past the node: the branch leaves flat, then falls away.
+      const bx = seat.x + side * reach * 0.82;
+      const by = seat.y + drop * d.f(0.12, 0.26);
+      shapes.push({
+        d: curve(seat.x, seat.y, bx, by, endX, endY),
+        stroke: p.inkDeep,
+        width: d.f(1.6, 2.2),
+      });
+      // Grains hang plumb whatever the branch is doing, which is the one thing
+      // that separates a panicle from a whorl of needles.
+      const beads = d.i(1, 2);
+      for (let k = 0; k < beads; k++) {
+        const len = d.f(10, 13);
+        const on = onQuad(seat.x, seat.y, bx, by, endX, endY, beads === 1 ? 1 : 0.5 + k * 0.5);
+        shapes.push({
+          // Plump against a hairline branch: at 32px that contrast is the only
+          // thing saying "grain" rather than "twig".
+          d: lens(on.x, on.y + len * 0.3, 90 + d.f(-12, 12), len, d.f(4.8, 6)),
+          fill: (i + k) % 2 === 0 ? p.ink : p.inkDeep,
+        });
+      }
+    }
+  }
+  // The apex spikelet nods off the tip. Stood upright it reads as a candle
+  // flame, which is the one thing a panicle must not look like.
+  const nod = (d.odds(0.5) ? 1 : -1) * d.f(20, 34);
+  const apexLen = d.f(11, 14);
+  shapes.push({
+    // Nudged a little down its own axis, so it caps the tip instead of floating
+    // beside it.
+    d: lens(
+      tipX - Math.sin(nod * DEG) * apexLen * 0.15,
+      topY + Math.cos(nod * DEG) * apexLen * 0.15,
+      90 + nod,
+      apexLen,
+      d.f(4, 5.2),
+    ),
+    fill: p.spark,
+    opacity: 0.85,
+  });
+  return shapes;
+};
+
+/**
+ * Straws crossed at a tie, heads fanning above it — the bound sheaf, for the
+ * grains sold as a harvest rather than as a jar. Solving the tie height from
+ * the two fan widths keeps every straw a single straight bar through one knot,
+ * and that pinch is what separates it from a bundle of celery.
+ */
+const sheaf: Draw = (d, p) => {
+  const count = d.i(4, 5);
+  const butt = d.f(10, 13);
+  const crown = d.f(20, 24);
+  const botY = d.f(76, 80);
+  const topY = d.f(34, 38);
+  const tieY = botY + (butt / (butt + crown)) * (topY - botY);
+  const shapes: Shape[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const t = (i / (count - 1)) * 2 - 1;
+    const x0 = 50 - t * butt;
+    const x1 = 50 + t * crown;
+    const a = Math.atan2(topY - botY, x1 - x0);
+    const head = d.f(14, 18);
+    shapes.push({
+      d: bar(x0, botY, x1, topY),
+      stroke: i % 2 === 0 ? p.ink : p.inkDeep,
+      width: d.f(3.2, 4.2),
+    });
+    // A head on every straw. Bare tips read as a bundle of stems.
+    shapes.push({
+      d: lens(
+        x1 + Math.cos(a) * head * 0.3,
+        topY + Math.sin(a) * head * 0.3,
+        a / DEG,
+        head,
+        head * d.f(0.3, 0.38),
+      ),
+      fill: i % 2 === 0 ? p.inkDeep : p.ink,
+    });
+  }
+
+  // Two turns of twine: one band alone reads as a shadow across the straws.
+  const bandHalf = d.f(6.5, 8.5);
+  const bandGap = d.f(6, 8);
+  for (let i = 0; i < 2; i++) {
+    const half = bandHalf * (i === 0 ? 1 : 0.84);
+    const y = tieY + (i - 0.5) * bandGap;
+    shapes.push({ d: bar(50 - half, y, 50 + half, y), stroke: p.spark, width: d.f(3.8, 4.8) });
+  }
+  return shapes;
+};
+
+export const GRAIN: readonly Draw[] = [ear, flakes, berries, panicle, sheaf];
 
 /* ------------------------------------------------------------------ spice */
 

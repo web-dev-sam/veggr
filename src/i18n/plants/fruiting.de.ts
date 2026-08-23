@@ -232,7 +232,7 @@ export const FRUITING_DE: PlantLocale = {
   },
   sweetcorn: {
     name: "Zuckermais",
-    aliases: ["mais", "maiskolben", "kukuruz", "sweetcorn"],
+    aliases: ["mais", "maiskolben", "kukuruz", "polenta", "maisgrieß", "maismehl", "popcorn"],
   },
   "thai-aubergine": {
     name: "Thai-Aubergine",

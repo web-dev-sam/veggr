@@ -8,6 +8,7 @@
 
 import type { Locale, PlantLocale } from "../locale.ts";
 import { FRUITING_DE } from "./fruiting.de.ts";
+import { GRAINS_DE } from "./grains.de.ts";
 import { GREENS_DE } from "./greens.de.ts";
 import { HERBS_DE } from "./herbs.de.ts";
 import { NUTS_DE } from "./nuts.de.ts";
@@ -27,6 +28,7 @@ const DE: PlantLocale = {
   ...STEMS_DE,
   ...NUTS_DE,
   ...SEEDS_DE,
+  ...GRAINS_DE,
   ...SPICES_DE,
   ...SWEETENERS_DE,
   ...ORCHARD_DE,

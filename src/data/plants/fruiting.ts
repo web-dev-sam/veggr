@@ -406,7 +406,7 @@ export const FRUITING: Plant[] = [
     name: "Sweetcorn",
     category: "fruiting",
     hue: 48,
-    aliases: ["corn", "corn on the cob", "maize"],
+    aliases: ["corn", "corn on the cob", "maize", "polenta", "cornmeal", "popcorn", "grits"],
   },
   {
     id: "thai-aubergine",

@@ -179,6 +179,7 @@ export const en = {
   "cat.sea": "Sea",
   "cat.nut": "Nut",
   "cat.seed": "Seed",
+  "cat.grain": "Grain",
   "cat.spice": "Spice",
   "cat.sweet": "Sweet",
 } as const;

@@ -31,6 +31,9 @@ export const CATEGORY_IDS = [
   // drawer, and appending keeps the produce chips in the order they had.
   "nut",
   "seed",
+  // Cereals and the pseudocereals cooked like them: the sack beside the seed
+  // jars, and the one pantry class a plate of dinner is usually built on.
+  "grain",
   "spice",
   // Syrups and nectars: the shelf next to the spice rack, and the only class
   // whose entries are a plant reduced to a jar rather than the plant itself.

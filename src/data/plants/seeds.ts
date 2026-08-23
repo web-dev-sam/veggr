@@ -2,16 +2,10 @@ import type { Plant } from "../plant.ts";
 
 /**
  * Seeds eaten as food in their own right — a portion, not a pinch. Seeds used
- * only to season a dish (cumin, caraway, mustard) live in `spices.ts`.
+ * only to season a dish (cumin, caraway, mustard) live in `spices.ts`, and the
+ * ones cooked by the bowlful (quinoa, buckwheat, teff) in `grains.ts`.
  */
 export const SEEDS: Plant[] = [
-  {
-    id: "amaranth-grain",
-    name: "Amaranth Grain",
-    category: "seed",
-    hue: 42,
-    aliases: ["amaranth", "kiwicha", "amaranth seeds"],
-  },
   {
     id: "basil-seeds",
     name: "Basil Seeds",
@@ -27,25 +21,11 @@ export const SEEDS: Plant[] = [
     aliases: ["black sesame seeds", "kuro goma", "kala til"],
   },
   {
-    id: "buckwheat",
-    name: "Buckwheat",
-    category: "seed",
-    hue: 70,
-    aliases: ["buckwheat groats", "kasha", "soba grain"],
-  },
-  {
     id: "camelina-seeds",
     name: "Camelina Seeds",
     category: "seed",
     hue: 36,
     aliases: ["camelina", "gold-of-pleasure", "false flax"],
-  },
-  {
-    id: "canary-seed",
-    name: "Canary Seed",
-    category: "seed",
-    hue: 48,
-    aliases: ["canary grass seed", "alpiste", "canaryseed"],
   },
   {
     id: "chia-seeds",
@@ -67,20 +47,6 @@ export const SEEDS: Plant[] = [
     category: "seed",
     hue: 80,
     aliases: ["hemp hearts", "hulled hemp", "hemp seed"],
-  },
-  {
-    id: "jobs-tears",
-    name: "Job's Tears",
-    category: "seed",
-    hue: 200,
-    aliases: ["coix", "adlay", "hato mugi", "chinese pearl barley"],
-  },
-  {
-    id: "kaniwa",
-    name: "Kaniwa",
-    category: "seed",
-    hue: 15,
-    aliases: ["canihua", "cañihua", "baby quinoa"],
   },
   {
     id: "lotus-seeds",
@@ -132,13 +98,6 @@ export const SEEDS: Plant[] = [
     aliases: ["pepitas", "styrian pumpkin seeds", "pumpkin seed"],
   },
   {
-    id: "quinoa",
-    name: "Quinoa",
-    category: "seed",
-    hue: 50,
-    aliases: ["white quinoa", "red quinoa", "chenopodium"],
-  },
-  {
     id: "safflower-seeds",
     name: "Safflower Seeds",
     category: "seed",
@@ -151,13 +110,6 @@ export const SEEDS: Plant[] = [
     category: "seed",
     hue: 35,
     aliases: ["sunflower kernels", "pipas", "sunflower seed"],
-  },
-  {
-    id: "teff",
-    name: "Teff",
-    category: "seed",
-    hue: 20,
-    aliases: ["tef", "teff grain", "eragrostis"],
   },
   {
     id: "watermelon-seeds",

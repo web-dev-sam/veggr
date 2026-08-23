@@ -176,6 +176,7 @@ export const de = {
   "cat.sea": "Algen",
   "cat.nut": "Nüsse",
   "cat.seed": "Saaten",
+  "cat.grain": "Getreide",
   "cat.spice": "Gewürze",
   "cat.sweet": "Süßes",
 } as const satisfies Record<MessageKey, string>;
