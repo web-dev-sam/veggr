@@ -1,9 +1,7 @@
 {
   "title": "veggr",
   "tagline": "A PWA that tracks how many different plants you eat each day and each week. 🥦",
-  "why": [
-    "Purely vibe coded — don't blame me for horrible code, I didn't look at it, but it works ;)"
-  ],
+  "why": "I wanted to know whether I actually eat a variety of plants each week, not just a lot of the same ones.",
   "sections": [
     {
       "title": "Where to find it",

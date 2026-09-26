@@ -10,7 +10,7 @@ _A PWA that tracks how many different plants you eat each day and each week. ðŸ¥
 &nbsp;
 
 ## Why does this exist?
-1. Purely vibe coded â€” don't blame me for horrible code, I didn't look at it, but it works ;)
+I wanted to know whether I actually eat a variety of plants each week, not just a lot of the same ones.
 
 ## Where to find it
 
